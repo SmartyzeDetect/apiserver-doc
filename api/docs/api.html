@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style type="text/css"/><!--
+/*!
+ * Bootstrap v2.0.3
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:"";}
+.clearfix:after{clear:both;}
+.hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
+.input-block-level{display:block;width:100%;min-height:28px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
+audio:not([controls]){display:none;}
+html{font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+a:focus{outline:thin dotted #333;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
+a:hover,a:active{outline:0;}
+sub,sup{position:relative;font-size:75%;line-height:0;vertical-align:baseline;}
+sup{top:-0.5em;}
+sub{bottom:-0.25em;}
+img{max-width:100%;vertical-align:middle;border:0;-ms-interpolation-mode:bicubic;}
+button,input,select,textarea{margin:0;font-size:100%;vertical-align:middle;}
+button,input{*overflow:visible;line-height:normal;}
+button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0;}
+button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
+input[type="search"]{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;-webkit-appearance:textfield;}
+input[type="search"]::-webkit-search-decoration,input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;}
+textarea{overflow:auto;vertical-align:top;}
+body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;color:#333333;background-color:#ffffff;}
+a{color:#0088cc;text-decoration:none;}
+a:hover{color:#005580;text-decoration:underline;}
+.row{margin-left:-20px;*zoom:1;}.row:before,.row:after{display:table;content:"";}
+.row:after{clear:both;}
+[class*="span"]{float:left;margin-left:20px;}
+.container,.navbar-fixed-top .container,.navbar-fixed-bottom .container{width:940px;}
+.span12{width:940px;}
+.span11{width:860px;}
+.span10{width:780px;}
+.span9{width:700px;}
+.span8{width:620px;}
+.span7{width:540px;}
+.span6{width:460px;}
+.span5{width:380px;}
+.span4{width:300px;}
+.span3{width:220px;}
+.span2{width:140px;}
+.span1{width:60px;}
+.offset12{margin-left:980px;}
+.offset11{margin-left:900px;}
+.offset10{margin-left:820px;}
+.offset9{margin-left:740px;}
+.offset8{margin-left:660px;}
+.offset7{margin-left:580px;}
+.offset6{margin-left:500px;}
+.offset5{margin-left:420px;}
+.offset4{margin-left:340px;}
+.offset3{margin-left:260px;}
+.offset2{margin-left:180px;}
+.offset1{margin-left:100px;}
+.row-fluid{width:100%;*zoom:1;}.row-fluid:before,.row-fluid:after{display:table;content:"";}
+.row-fluid:after{clear:both;}
+.row-fluid [class*="span"]{display:block;width:100%;min-height:28px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;float:left;margin-left:2.127659574%;*margin-left:2.0744680846382977%;}
+.row-fluid [class*="span"]:first-child{margin-left:0;}
+.row-fluid .span12{width:99.99999998999999%;*width:99.94680850063828%;}
+.row-fluid .span11{width:91.489361693%;*width:91.4361702036383%;}
+.row-fluid .span10{width:82.97872339599999%;*width:82.92553190663828%;}
+.row-fluid .span9{width:74.468085099%;*width:74.4148936096383%;}
+.row-fluid .span8{width:65.95744680199999%;*width:65.90425531263828%;}
+.row-fluid .span7{width:57.446808505%;*width:57.3936170156383%;}
+.row-fluid .span6{width:48.93617020799999%;*width:48.88297871863829%;}
+.row-fluid .span5{width:40.425531911%;*width:40.3723404216383%;}
+.row-fluid .span4{width:31.914893614%;*width:31.8617021246383%;}
+.row-fluid .span3{width:23.404255317%;*width:23.3510638276383%;}
+.row-fluid .span2{width:14.89361702%;*width:14.8404255306383%;}
+.row-fluid .span1{width:6.382978723%;*width:6.329787233638298%;}
+.container{margin-right:auto;margin-left:auto;*zoom:1;}.container:before,.container:after{display:table;content:"";}
+.container:after{clear:both;}
+.container-fluid{padding-right:20px;padding-left:20px;*zoom:1;}.container-fluid:before,.container-fluid:after{display:table;content:"";}
+.container-fluid:after{clear:both;}
+p{margin:0 0 9px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;}p small{font-size:11px;color:#999999;}
+.lead{margin-bottom:18px;font-size:20px;font-weight:200;line-height:27px;}
+h1,h2,h3,h4,h5,h6{margin:0;font-family:inherit;font-weight:bold;color:inherit;text-rendering:optimizelegibility;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{font-weight:normal;color:#999999;}
+h1{font-size:30px;line-height:36px;}h1 small{font-size:18px;}
+h2{font-size:24px;line-height:36px;}h2 small{font-size:18px;}
+h3{font-size:18px;line-height:27px;}h3 small{font-size:14px;}
+h4,h5,h6{line-height:18px;}
+h4{font-size:14px;}h4 small{font-size:12px;}
+h5{font-size:12px;}
+h6{font-size:11px;color:#999999;text-transform:uppercase;}
+.page-header{padding-bottom:17px;margin:18px 0;border-bottom:1px solid #eeeeee;}
+.page-header h1{line-height:1;}
+ul,ol{padding:0;margin:0 0 9px 25px;}
+ul ul,ul ol,ol ol,ol ul{margin-bottom:0;}
+ul{list-style:disc;}
+ol{list-style:decimal;}
+li{line-height:18px;}
+ul.unstyled,ol.unstyled{margin-left:0;list-style:none;}
+dl{margin-bottom:18px;}
+dt,dd{line-height:18px;}
+dt{font-weight:bold;line-height:17px;}
+dd{margin-left:9px;}
+.dl-horizontal dt{float:left;width:120px;clear:left;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dl-horizontal dd{margin-left:130px;}
+hr{margin:18px 0;border:0;border-top:1px solid #eeeeee;border-bottom:1px solid #ffffff;}
+strong{font-weight:bold;}
+em{font-style:italic;}
+.muted{color:#999999;}
+abbr[title]{cursor:help;border-bottom:1px dotted #ddd;}
+abbr.initialism{font-size:90%;text-transform:uppercase;}
+blockquote{padding:0 0 0 15px;margin:0 0 18px;border-left:5px solid #eeeeee;}blockquote p{margin-bottom:0;font-size:16px;font-weight:300;line-height:22.5px;}
+blockquote small{display:block;line-height:18px;color:#999999;}blockquote small:before{content:'\2014 \00A0';}
+blockquote.pull-right{float:right;padding-right:15px;padding-left:0;border-right:5px solid #eeeeee;border-left:0;}blockquote.pull-right p,blockquote.pull-right small{text-align:right;}
+q:before,q:after,blockquote:before,blockquote:after{content:"";}
+address{display:block;margin-bottom:18px;font-style:normal;line-height:18px;}
+small{font-size:100%;}
+cite{font-style:normal;}
+code,pre{padding:0 3px 2px;font-family:Menlo,Monaco,Consolas,"Courier New",monospace;font-size:12px;color:#333333;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+code{padding:2px 4px;color:#d14;background-color:#f7f7f9;border:1px solid #e1e1e8;}
+pre{display:block;padding:8.5px;margin:0 0 9px;font-size:12.025px;line-height:18px;word-break:break-all;word-wrap:break-word;white-space:pre;white-space:pre-wrap;background-color:#f5f5f5;border:1px solid #ccc;border:1px solid rgba(0, 0, 0, 0.15);-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}pre.prettyprint{margin-bottom:18px;}
+pre code{padding:0;color:inherit;background-color:transparent;border:0;}
+.pre-scrollable{max-height:340px;overflow-y:scroll;}
+.label,.badge{font-size:10.998px;font-weight:bold;line-height:14px;color:#ffffff;vertical-align:baseline;white-space:nowrap;text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);background-color:#999999;}
+.label{padding:1px 4px 2px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+.badge{padding:1px 9px 2px;-webkit-border-radius:9px;-moz-border-radius:9px;border-radius:9px;}
+a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
+.label-important,.badge-important{background-color:#b94a48;}
+.label-important[href],.badge-important[href]{background-color:#953b39;}
+.label-warning,.badge-warning{background-color:#f89406;}
+.label-warning[href],.badge-warning[href]{background-color:#c67605;}
+.label-success,.badge-success{background-color:#468847;}
+.label-success[href],.badge-success[href]{background-color:#356635;}
+.label-info,.badge-info{background-color:#3a87ad;}
+.label-info[href],.badge-info[href]{background-color:#2d6987;}
+.label-inverse,.badge-inverse{background-color:#333333;}
+.label-inverse[href],.badge-inverse[href]{background-color:#1a1a1a;}
+table{max-width:100%;background-color:transparent;border-collapse:collapse;border-spacing:0;}
+.table{width:100%;margin-bottom:18px;}.table th,.table td{padding:8px;line-height:18px;text-align:left;vertical-align:top;border-top:1px solid #dddddd;}
+.table th{font-weight:bold;}
+.table thead th{vertical-align:bottom;}
+.table caption+thead tr:first-child th,.table caption+thead tr:first-child td,.table colgroup+thead tr:first-child th,.table colgroup+thead tr:first-child td,.table thead:first-child tr:first-child th,.table thead:first-child tr:first-child td{border-top:0;}
+.table tbody+tbody{border-top:2px solid #dddddd;}
+.table-condensed th,.table-condensed td{padding:4px 5px;}
+.table-bordered{border:1px solid #dddddd;border-collapse:separate;*border-collapse:collapsed;border-left:0;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}.table-bordered th,.table-bordered td{border-left:1px solid #dddddd;}
+.table-bordered caption+thead tr:first-child th,.table-bordered caption+tbody tr:first-child th,.table-bordered caption+tbody tr:first-child td,.table-bordered colgroup+thead tr:first-child th,.table-bordered colgroup+tbody tr:first-child th,.table-bordered colgroup+tbody tr:first-child td,.table-bordered thead:first-child tr:first-child th,.table-bordered tbody:first-child tr:first-child th,.table-bordered tbody:first-child tr:first-child td{border-top:0;}
+.table-bordered thead:first-child tr:first-child th:first-child,.table-bordered tbody:first-child tr:first-child td:first-child{-webkit-border-top-left-radius:4px;border-top-left-radius:4px;-moz-border-radius-topleft:4px;}
+.table-bordered thead:first-child tr:first-child th:last-child,.table-bordered tbody:first-child tr:first-child td:last-child{-webkit-border-top-right-radius:4px;border-top-right-radius:4px;-moz-border-radius-topright:4px;}
+.table-bordered thead:last-child tr:last-child th:first-child,.table-bordered tbody:last-child tr:last-child td:first-child{-webkit-border-radius:0 0 0 4px;-moz-border-radius:0 0 0 4px;border-radius:0 0 0 4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;-moz-border-radius-bottomleft:4px;}
+.table-bordered thead:last-child tr:last-child th:last-child,.table-bordered tbody:last-child tr:last-child td:last-child{-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;-moz-border-radius-bottomright:4px;}
+.table-striped tbody tr:nth-child(odd) td,.table-striped tbody tr:nth-child(odd) th{background-color:#f9f9f9;}
+.table tbody tr:hover td,.table tbody tr:hover th{background-color:#f5f5f5;}
+table .span1{float:none;width:44px;margin-left:0;}
+table .span2{float:none;width:124px;margin-left:0;}
+table .span3{float:none;width:204px;margin-left:0;}
+table .span4{float:none;width:284px;margin-left:0;}
+table .span5{float:none;width:364px;margin-left:0;}
+table .span6{float:none;width:444px;margin-left:0;}
+table .span7{float:none;width:524px;margin-left:0;}
+table .span8{float:none;width:604px;margin-left:0;}
+table .span9{float:none;width:684px;margin-left:0;}
+table .span10{float:none;width:764px;margin-left:0;}
+table .span11{float:none;width:844px;margin-left:0;}
+table .span12{float:none;width:924px;margin-left:0;}
+table .span13{float:none;width:1004px;margin-left:0;}
+table .span14{float:none;width:1084px;margin-left:0;}
+table .span15{float:none;width:1164px;margin-left:0;}
+table .span16{float:none;width:1244px;margin-left:0;}
+table .span17{float:none;width:1324px;margin-left:0;}
+table .span18{float:none;width:1404px;margin-left:0;}
+table .span19{float:none;width:1484px;margin-left:0;}
+table .span20{float:none;width:1564px;margin-left:0;}
+table .span21{float:none;width:1644px;margin-left:0;}
+table .span22{float:none;width:1724px;margin-left:0;}
+table .span23{float:none;width:1804px;margin-left:0;}
+table .span24{float:none;width:1884px;margin-left:0;}
+/* Auto-generated CSS for generated Thrift docs */
+h3, h4 { margin-bottom: 6px; }
+div.definition { border: 1px solid #CCC; margin-bottom: 10px; padding: 10px; }
+div.extends { margin: -0.5em 0 1em 5em }
+td { vertical-align: top; }
+table { empty-cells: show; }
+code { line-height: 20px; }
+.table-bordered th, .table-bordered td { border-bottom: 1px solid #DDDDDD; }
+--></style>
+<title>Thrift module: api</title></head><body>
+<div class="container-fluid">
+<h1>Thrift module: api</h1>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Module</th><th>Services</th><th>Data types</th><th>Constants</th></tr></thead><tbody>
+<tr>
+<td>api</td><td><a href="#Svc_DetectionApi">DetectionApi</a><br/>
+<ul>
+<li><a href="#Fn_DetectionApi_clearSession">clearSession</a></li>
+<li><a href="#Fn_DetectionApi_createSession">createSession</a></li>
+<li><a href="#Fn_DetectionApi_deleteSession">deleteSession</a></li>
+<li><a href="#Fn_DetectionApi_destroy">destroy</a></li>
+<li><a href="#Fn_DetectionApi_getSessionResult">getSessionResult</a></li>
+<li><a href="#Fn_DetectionApi_getSessions">getSessions</a></li>
+<li><a href="#Fn_DetectionApi_getStatus">getStatus</a></li>
+<li><a href="#Fn_DetectionApi_init">init</a></li>
+<li><a href="#Fn_DetectionApi_processInputForSession">processInputForSession</a></li>
+<li><a href="#Fn_DetectionApi_runDetection">runDetection</a></li>
+</ul>
+</td>
+<td><a href="#Enum_CrossDirection">CrossDirection</a><br/>
+<a href="#Struct_DetectedObject">DetectedObject</a><br/>
+<a href="#Struct_DetectionArea">DetectionArea</a><br/>
+<a href="#Struct_DetectionAreaSettings">DetectionAreaSettings</a><br/>
+<a href="#Struct_DetectionCapability">DetectionCapability</a><br/>
+<a href="#Struct_DetectionInput">DetectionInput</a><br/>
+<a href="#Enum_DetectionInputType">DetectionInputType</a><br/>
+<a href="#Struct_DetectionOutput">DetectionOutput</a><br/>
+<a href="#Struct_DetectionSession">DetectionSession</a><br/>
+<a href="#Struct_DetectionSettings">DetectionSettings</a><br/>
+<a href="#Struct_DetectorStatus">DetectorStatus</a><br/>
+<a href="#Enum_EncodedImageFormat">EncodedImageFormat</a><br/>
+<a href="#Struct_EncodedImageInput">EncodedImageInput</a><br/>
+<a href="#Enum_ImageBufferFormat">ImageBufferFormat</a><br/>
+<a href="#Struct_ImageFileInput">ImageFileInput</a><br/>
+<a href="#Struct_InitRequest">InitRequest</a><br/>
+<a href="#Struct_InputParams">InputParams</a><br/>
+<a href="#Enum_LineCrossCriteria">LineCrossCriteria</a><br/>
+<a href="#Struct_LineCrossDetectionResult">LineCrossDetectionResult</a><br/>
+<a href="#Struct_LineCrossSettings">LineCrossSettings</a><br/>
+<a href="#Struct_LineCrossViolation">LineCrossViolation</a><br/>
+<a href="#Struct_MaskDetectionResult">MaskDetectionResult</a><br/>
+<a href="#Struct_MaskDetectionSettings">MaskDetectionSettings</a><br/>
+<a href="#Struct_NormPoint">NormPoint</a><br/>
+<a href="#Enum_ObjectDetectionEnv">ObjectDetectionEnv</a><br/>
+<a href="#Struct_ObjectDetectionResult">ObjectDetectionResult</a><br/>
+<a href="#Struct_ObjectDetectionSettings">ObjectDetectionSettings</a><br/>
+<a href="#Enum_ObjectType">ObjectType</a><br/>
+<a href="#Struct_RawImageInput">RawImageInput</a><br/>
+<a href="#Enum_ResultCode">ResultCode</a><br/>
+<a href="#Struct_SocialDistanceResult">SocialDistanceResult</a><br/>
+<a href="#Struct_SocialDistanceSettings">SocialDistanceSettings</a><br/>
+<a href="#Struct_SocialDistanceViolation">SocialDistanceViolation</a><br/>
+<a href="#Struct_VideoFileInput">VideoFileInput</a><br/>
+</td>
+<td><code><a href="#Const_API_VERSION">API_VERSION</a></code><br/>
+</td>
+</tr></tbody></table>
+<hr/><h2 id="Constants">Constants</h2>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Constant</th><th>Type</th><th>Value</th></tr></thead><tbody>
+<tr id="Const_API_VERSION"><td><code>API_VERSION</code></td><td><code>string</code></td><td><code>"1.0.0"</code></td></tr><tr><td colspan="3"><blockquote><pre>API version - follows semantic versioning
+</pre><br/></blockquote></td></tr></tbody></table><hr/><h2 id="Enumerations">Enumerations</h2>
+<div class="definition"><h3 id="Enum_ResultCode">Enumeration: ResultCode</h3>
+<pre>Result codes for APIs
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>SUCCESS</code></td><td><code>1</code></td><td>
+<pre>Generic success code
+</pre><br/></td></tr>
+<tr><td><code>ERR_GENERIC</code></td><td><code>2</code></td><td>
+<pre>Generic error code
+</pre><br/></td></tr>
+<tr><td><code>ERR_BUSY</code></td><td><code>3</code></td><td>
+<pre>API server is busy processing requests
+</pre><br/></td></tr>
+<tr><td><code>ERR_INVALID_REQ</code></td><td><code>4</code></td><td>
+<pre>Invalid parameters provided by client
+</pre><br/></td></tr>
+<tr><td><code>ERR_UNSUPPORTED</code></td><td><code>5</code></td><td>
+<pre>Detection is unsupported on instance (cpu/mem constraints not met)
+</pre><br/></td></tr>
+<tr><td><code>ERR_NOT_ACTIVATED</code></td><td><code>6</code></td><td>
+<pre>API server is not activated with a license
+</pre><br/></td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_ObjectDetectionEnv">Enumeration: ObjectDetectionEnv</h3>
+<pre>Object detection accuracy/speed setting
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>NORMAL</code></td><td><code>1</code></td><td>
+<pre>Higher speed, lower accuracy
+</pre><br/></td></tr>
+<tr><td><code>BUSY</code></td><td><code>2</code></td><td>
+<pre>Medium speed, medium accuracy
+</pre><br/></td></tr>
+<tr><td><code>VERY_BUSY</code></td><td><code>3</code></td><td>
+<pre>Slower speed, higher accuracy
+</pre><br/></td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_LineCrossCriteria">Enumeration: LineCrossCriteria</h3>
+<pre>Line cross criteria for line cross settings
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>LINE_CROSS</code></td><td><code>1</code></td><td>
+<pre>Line cross from out to in direction, line extends across view
+</pre><br/></td></tr>
+<tr><td><code>LINE_SEGMENT_CROSS</code></td><td><code>2</code></td><td>
+<pre>Line cross from out to in direction, crossing across line only
+</pre><br/></td></tr>
+<tr><td><code>LINE_CROSS_BOTH_DIR</code></td><td><code>3</code></td><td>
+<pre>Line cross from both directions, line extends across view
+</pre><br/></td></tr>
+<tr><td><code>LINE_SEGMENT_CROSS_BOTH_DIR</code></td><td><code>4</code></td><td>
+<pre>Line cross from both directions, crossing across line only
+</pre><br/></td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_ObjectType">Enumeration: ObjectType</h3>
+<pre>Detection object type
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>PERSON</code></td><td><code>1</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_DetectionInputType">Enumeration: DetectionInputType</h3>
+<pre>Detection input type
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>IMG_BUFFER_RAW</code></td><td><code>1</code></td><td>
+<pre>Raw image pixel data (e.g., RGB buffer)
+</pre><br/></td></tr>
+<tr><td><code>IMG_BUFFER_ENCODED</code></td><td><code>2</code></td><td>
+<pre>Encoded image data (e.g., JPEG buffer)
+</pre><br/></td></tr>
+<tr><td><code>IMG_FILE_PATH</code></td><td><code>3</code></td><td>
+<pre>Path to an image file
+</pre><br/></td></tr>
+<tr><td><code>VID_FILE_PATH</code></td><td><code>4</code></td><td>
+<pre>Path to a video file
+</pre><br/></td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_ImageBufferFormat">Enumeration: ImageBufferFormat</h3>
+<pre>Raw image pixel format
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>RGB_HWC</code></td><td><code>1</code></td><td>
+<pre>RGB format in HWC (Height-Width-Channel) order
+</pre><br/></td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_EncodedImageFormat">Enumeration: EncodedImageFormat</h3>
+<pre>Encoded image format type
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>JPEG</code></td><td><code>1</code></td><td>
+<pre>JPEG encoding
+</pre><br/></td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_CrossDirection">Enumeration: CrossDirection</h3>
+<pre>Line cross direction
+</pre><br/><br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>UNKNOWN</code></td><td><code>0</code></td><td>
+<pre>direction not determined
+</pre><br/></td></tr>
+<tr><td><code>CROSS_IN</code></td><td><code>1</code></td><td>
+<pre>crossing from out to in
+</pre><br/></td></tr>
+<tr><td><code>CROSS_OUT</code></td><td><code>2</code></td><td>
+<pre>crossing from in to out
+</pre><br/></td></tr>
+</table></div>
+<hr/><h2 id="Structs">Data structures</h2>
+<div class="definition"><h3 id="Struct_InitRequest">Struct: InitRequest</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>license</td><td><code>string</code></td><td>License for activation
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>API server initialization request
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionCapability">Struct: DetectionCapability</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>numConcurrentSessions</td><td><code>i32</code></td><td>Number of possible concurrent detection sessions
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detection capabilities of instance where API server is running
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectorStatus">Struct: DetectorStatus</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>version</td><td><code>string</code></td><td>S/W version of the server
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>apiVersion</td><td><code>string</code></td><td>API version of the server
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>initStatus</td><td><code><a href="#Enum_ResultCode">ResultCode</a></code></td><td>Initialization status of the server
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>capability</td><td><code><a href="#Struct_DetectionCapability">DetectionCapability</a></code></td><td>Detection capability of server instance
+</td><td>default</td><td></td></tr>
+<tr><td>5</td><td>activationChallenge</td><td><code>string</code></td><td>Activation challenge for license in offline mode
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>API server status
+</pre><br/></div><div class="definition"><h3 id="Struct_ObjectDetectionSettings">Struct: ObjectDetectionSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether object detection is enabled
+</td><td>required</td><td></td></tr>
+<tr><td>2</td><td>env</td><td><code><a href="#Enum_ObjectDetectionEnv">ObjectDetectionEnv</a></code></td><td>object detection accuracy/speed setting
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>objectType</td><td><code><a href="#Enum_ObjectType">ObjectType</a></code></td><td>object detection type
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>detectOnlyMovingObjects</td><td><code>bool</code></td><td>whether to ignore static objects
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Settings for object detection
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionArea">Struct: DetectionArea</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>top</td><td><code>double</code></td><td>top left y co-ordinate normalized [0, 1]
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>left</td><td><code>double</code></td><td>top left x co-ordinate normalized [0, 1]
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>bottom</td><td><code>double</code></td><td>bottom right y co-ordinate normalized [0, 1]
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>right</td><td><code>double</code></td><td>bottom right x co-ordinate normalized [0, 1]
+</td><td>default</td><td></td></tr>
+<tr><td>5</td><td>name</td><td><code>string</code></td><td>friendly name of the area
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Object detection area descriptor
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionAreaSettings">Struct: DetectionAreaSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether object detection within areas only is enabled
+</td><td>required</td><td></td></tr>
+<tr><td>2</td><td>areas</td><td><code>list&lt;<code><a href="#Struct_DetectionArea">DetectionArea</a></code>&gt;</code></td><td>list of object detection areas (max of 2)
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detection area settings
+</pre><br/></div><div class="definition"><h3 id="Struct_NormPoint">Struct: NormPoint</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>x</td><td><code>double</code></td><td>x co-ordinate normalized [0,1]
+</td><td>required</td><td></td></tr>
+<tr><td>2</td><td>y</td><td><code>double</code></td><td>y co-ordinate normalized [0,1]
+</td><td>required</td><td></td></tr>
+</tbody></table><br/><pre>Normalized co-ordinate descriptor
+Co-ordinate system: Top left of image is (0,0)
+x increases from left to right
+y increases from top to bottom
+</pre><br/></div><div class="definition"><h3 id="Struct_SocialDistanceSettings">Struct: SocialDistanceSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether social distancing violation detection is enabled
+</td><td>required</td><td></td></tr>
+<tr><td>2</td><td>groundBoundary</td><td><code>list&lt;<code><a href="#Struct_NormPoint">NormPoint</a></code>&gt;</code></td><td>4 points indicating a rectangular area on the ground in view
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>minSeparation</td><td><code>list&lt;<code><a href="#Struct_NormPoint">NormPoint</a></code>&gt;</code></td><td>2 points indicating the minimum separation on the ground
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Social distancing detection settings
+</pre><br/></div><div class="definition"><h3 id="Struct_LineCrossSettings">Struct: LineCrossSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether line crossing detection is enabled
+</td><td>required</td><td></td></tr>
+<tr><td>2</td><td>boundary</td><td><code>list&lt;<code><a href="#Struct_NormPoint">NormPoint</a></code>&gt;</code></td><td>2 points on the ground in view indicating the line to monitor
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>inPoint</td><td><code><a href="#Struct_NormPoint">NormPoint</a></code></td><td>1 point denoting the 'in' side of the line
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>crossCriteria</td><td><code><a href="#Enum_LineCrossCriteria">LineCrossCriteria</a></code></td><td>Line cross mode to detect
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Line crossing detection settings
+Note: A line cross is considered using the bottom middle point
+of an object bounding box as reference
+</pre><br/></div><div class="definition"><h3 id="Struct_MaskDetectionSettings">Struct: MaskDetectionSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether mask detection is enabled
+</td><td>required</td><td></td></tr>
+</tbody></table><br/><pre>Mask detection settings
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionSettings">Struct: DetectionSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>objSettings</td><td><code><a href="#Struct_ObjectDetectionSettings">ObjectDetectionSettings</a></code></td><td>Object detection settings
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>sdSettings</td><td><code><a href="#Struct_SocialDistanceSettings">SocialDistanceSettings</a></code></td><td>Social distancing detection settings
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>detAreaSettings</td><td><code><a href="#Struct_DetectionAreaSettings">DetectionAreaSettings</a></code></td><td>Area detection settings
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>lineCrossSettings</td><td><code><a href="#Struct_LineCrossSettings">LineCrossSettings</a></code></td><td>Line cross settings
+</td><td>default</td><td></td></tr>
+<tr><td>5</td><td>maskSettings</td><td><code><a href="#Struct_MaskDetectionSettings">MaskDetectionSettings</a></code></td><td>Mask detection settings
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detection settings for a session
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionSession">Struct: DetectionSession</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>id</td><td><code>i32</code></td><td>A unique id of the session
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>detectionSettings</td><td><code><a href="#Struct_DetectionSettings">DetectionSettings</a></code></td><td>Detection settings for the session
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detection session descriptor
+</pre><br/></div><div class="definition"><h3 id="Struct_RawImageInput">Struct: RawImageInput</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>width</td><td><code>i16</code></td><td>width of image
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>height</td><td><code>i16</code></td><td>height of image
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>format</td><td><code><a href="#Enum_ImageBufferFormat">ImageBufferFormat</a></code></td><td>image pixel format
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>buffer</td><td><code>binary</code></td><td>image buffer
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Raw image input
+</pre><br/></div><div class="definition"><h3 id="Struct_EncodedImageInput">Struct: EncodedImageInput</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>format</td><td><code><a href="#Enum_EncodedImageFormat">EncodedImageFormat</a></code></td><td>encoding format of image
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>buffer</td><td><code>binary</code></td><td>encoded image buffer
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>bufferLength</td><td><code>i32</code></td><td>buffer length
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Encoded image input
+</pre><br/></div><div class="definition"><h3 id="Struct_ImageFileInput">Struct: ImageFileInput</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>filename</td><td><code>string</code></td><td>path to image file
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Image file based input
+</pre><br/></div><div class="definition"><h3 id="Struct_VideoFileInput">Struct: VideoFileInput</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>filename</td><td><code>string</code></td><td>path to video file
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>processFps</td><td><code>i32</code></td><td>processing FPS for video (max 10)
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Video file based input
+</pre><br/></div><div class="definition"><h3 id="Struct_InputParams">Union: InputParams</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>rawImageInput</td><td><code><a href="#Struct_RawImageInput">RawImageInput</a></code></td><td>raw pixel image
+</td><td>optional</td><td></td></tr>
+<tr><td>2</td><td>encImageInput</td><td><code><a href="#Struct_EncodedImageInput">EncodedImageInput</a></code></td><td>encoded image
+</td><td>optional</td><td></td></tr>
+<tr><td>3</td><td>imgFileInput</td><td><code><a href="#Struct_ImageFileInput">ImageFileInput</a></code></td><td>image file input
+</td><td>optional</td><td></td></tr>
+<tr><td>4</td><td>vidFileInput</td><td><code><a href="#Struct_VideoFileInput">VideoFileInput</a></code></td><td>video file input
+</td><td>optional</td><td></td></tr>
+</tbody></table><br/><pre>Media input for detection
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionInput">Struct: DetectionInput</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>type</td><td><code><a href="#Enum_DetectionInputType">DetectionInputType</a></code></td><td>detection input type
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>params</td><td><code><a href="#Struct_InputParams">InputParams</a></code></td><td>detection input params
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detection input
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectedObject">Struct: DetectedObject</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>name</td><td><code>string</code></td><td>friendly name of detected object
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>objectId</td><td><code>i32</code></td><td>unique object id for object within session
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>top</td><td><code>double</code></td><td>top-left y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>left</td><td><code>double</code></td><td>top-left x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>5</td><td>bottom</td><td><code>double</code></td><td>bottom-right y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>6</td><td>right</td><td><code>double</code></td><td>bottom-right x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>7</td><td>frameIndex</td><td><code>i32</code></td><td>index of frame (for videos) where object was detected
+</td><td>default</td><td></td></tr>
+<tr><td>8</td><td>confidence</td><td><code>double</code></td><td>confidence of detection score [0, 1]
+</td><td>default</td><td></td></tr>
+<tr><td>9</td><td>direction</td><td><code><a href="#Enum_CrossDirection">CrossDirection</a></code></td><td>line cross direction (if applicable)
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detected object descriptor
+</pre><br/></div><div class="definition"><h3 id="Struct_ObjectDetectionResult">Struct: ObjectDetectionResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>objects</td><td><code>list&lt;<code><a href="#Struct_DetectedObject">DetectedObject</a></code>&gt;</code></td><td>list of detected objects
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Object detection result
+</pre><br/></div><div class="definition"><h3 id="Struct_SocialDistanceViolation">Struct: SocialDistanceViolation</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>first</td><td><code><a href="#Struct_DetectedObject">DetectedObject</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>second</td><td><code><a href="#Struct_DetectedObject">DetectedObject</a></code></td><td></td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Social distancing violation instance - detected object pair in violation
+</pre><br/></div><div class="definition"><h3 id="Struct_SocialDistanceResult">Struct: SocialDistanceResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>violations</td><td><code>list&lt;<code><a href="#Struct_SocialDistanceViolation">SocialDistanceViolation</a></code>&gt;</code></td><td>list of social distancing violations
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Social distancing violation results
+</pre><br/></div><div class="definition"><h3 id="Struct_LineCrossViolation">Struct: LineCrossViolation</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>first</td><td><code><a href="#Struct_DetectedObject">DetectedObject</a></code></td><td>object position before crossing
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>second</td><td><code><a href="#Struct_DetectedObject">DetectedObject</a></code></td><td>object position after crossing
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Line cross violation instance
+</pre><br/></div><div class="definition"><h3 id="Struct_LineCrossDetectionResult">Struct: LineCrossDetectionResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>violations</td><td><code>list&lt;<code><a href="#Struct_LineCrossViolation">LineCrossViolation</a></code>&gt;</code></td><td>list of line cross violations
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Line cross detection results
+</pre><br/></div><div class="definition"><h3 id="Struct_MaskDetectionResult">Struct: MaskDetectionResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>objects</td><td><code>list&lt;<code><a href="#Struct_DetectedObject">DetectedObject</a></code>&gt;</code></td><td>list of mask (violations and compliant) objects
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Mask detection results
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectionOutput">Struct: DetectionOutput</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>status</td><td><code><a href="#Enum_ResultCode">ResultCode</a></code></td><td>Detection status code
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>objDetResult</td><td><code><a href="#Struct_ObjectDetectionResult">ObjectDetectionResult</a></code></td><td>object detections
+</td><td>optional</td><td></td></tr>
+<tr><td>3</td><td>socialDetResult</td><td><code><a href="#Struct_SocialDistanceResult">SocialDistanceResult</a></code></td><td>social distancing violations
+</td><td>optional</td><td></td></tr>
+<tr><td>4</td><td>lineCrossResult</td><td><code><a href="#Struct_LineCrossDetectionResult">LineCrossDetectionResult</a></code></td><td>line crossing detections
+</td><td>optional</td><td></td></tr>
+<tr><td>5</td><td>maskDetResult</td><td><code><a href="#Struct_MaskDetectionResult">MaskDetectionResult</a></code></td><td>mask detections
+</td><td>optional</td><td></td></tr>
+</tbody></table><br/><pre>Detection output descriptor
+</pre><br/></div><hr/><h2 id="Services">Services</h2>
+<h3 id="Svc_DetectionApi">Service: DetectionApi</h3>
+<pre>Detection API
+</pre><br/><div class="definition"><h4 id="Fn_DetectionApi_init">Function: DetectionApi.init</h4>
+<pre><code><a href="#Struct_DetectorStatus">DetectorStatus</a></code> init(<code><a href="#Struct_InitRequest">InitRequest</a></code> request)
+</pre><pre>Init API server with license
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_getStatus">Function: DetectionApi.getStatus</h4>
+<pre><code><a href="#Struct_DetectorStatus">DetectorStatus</a></code> getStatus()
+</pre><pre>Get API server status
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_destroy">Function: DetectionApi.destroy</h4>
+<pre><code><a href="#Enum_ResultCode">ResultCode</a></code> destroy()
+</pre><pre>Stop API server
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_createSession">Function: DetectionApi.createSession</h4>
+<pre><code>i32</code> createSession(<code><a href="#Struct_DetectionSettings">DetectionSettings</a></code> settings)
+</pre><pre>Create new detection session
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_getSessions">Function: DetectionApi.getSessions</h4>
+<pre><code>list&lt;<code><a href="#Struct_DetectionSession">DetectionSession</a></code>&gt;</code> getSessions()
+</pre><pre>Retrieve list of active sessions
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_deleteSession">Function: DetectionApi.deleteSession</h4>
+<pre><code><a href="#Enum_ResultCode">ResultCode</a></code> deleteSession(<code>i32</code> sessionId)
+</pre><pre>Delete an active session
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_clearSession">Function: DetectionApi.clearSession</h4>
+<pre><code><a href="#Struct_DetectionOutput">DetectionOutput</a></code> clearSession(<code>i32</code> sessionId)
+</pre><pre>Clear an active session (finalize temporary detections and retrieve output)
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_getSessionResult">Function: DetectionApi.getSessionResult</h4>
+<pre><code><a href="#Struct_DetectionOutput">DetectionOutput</a></code> getSessionResult(<code>i32</code> sessionId)
+</pre><pre>Get output for an active session
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_processInputForSession">Function: DetectionApi.processInputForSession</h4>
+<pre><code><a href="#Enum_ResultCode">ResultCode</a></code> processInputForSession(<code>i32</code> sessionId,
+                                  <code>i32</code> frameIndex,
+                                  <code><a href="#Struct_DetectionInput">DetectionInput</a></code> input)
+</pre><pre>Feed input for a detection session (typically used with videos)
+</pre><br/></div><div class="definition"><h4 id="Fn_DetectionApi_runDetection">Function: DetectionApi.runDetection</h4>
+<pre><code><a href="#Struct_DetectionOutput">DetectionOutput</a></code> runDetection(<code><a href="#Struct_DetectionInput">DetectionInput</a></code> input,
+                             <code><a href="#Struct_DetectionSettings">DetectionSettings</a></code> settings)
+</pre><pre>Combo API call to run detection and retrieve output in one-shot
+</pre><br/></div></div></body></html>

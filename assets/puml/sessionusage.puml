@@ -1,0 +1,19 @@
+@startuml
+participant App as App
+participant SDK as SDK
+
+App -> SDK : createSession(DetectionSettings)
+SDK --> App : sessionId
+
+group Detect multiple frames
+App -> SDK : processInputForSession(sessionId, DetectionInput)
+SDK --> App : Success
+end
+
+App -> SDK : getSessionResult(sessionId)
+SDK --> App : DetectionResult
+
+App -> SDK : deleteSession(sessionId)
+SDK --> App : Success
+@enduml
+
