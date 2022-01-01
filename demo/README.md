@@ -1,5 +1,4 @@
 # Demo
----
 
 The scripts in this directory provide simple demos for the capabilities of the SmartyzeDetect API.
 
