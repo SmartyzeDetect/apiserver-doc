@@ -6,7 +6,7 @@ import pickle
 from api.ttypes import *
 from DetectionApiClientImpl import DetectionApiClient
 from DetectionRunner import DetectionRunner
-from utils import DisplayUtils
+from utils import DisplayUtils, OutputRenderer
 
 PROC_FPS = 10
 
@@ -24,9 +24,29 @@ class ApiExecutor:
         crossCriteria, True)
   pass
 
-  def executeOnVideo(self, video):
-    self.output = self.runner.runOnVideoFrames(self.client, video, PROC_FPS)
-    return self.output.status == ResultCode.SUCCESS
+  def showFrame(self, frameIndex, frame, sessId, output):
+    self.renderer.addOutput(output, frameIndex)
+    canContinue = self.renderer.render(frame, frameIndex)
+    if not canContinue:
+      self.client.deleteSession(sessId)
+      sys.exit(0)
+  pass
+
+  def executeOnVideo(self, video, displayImm, fixedLines):
+    frameCb = None
+    if displayImm:
+      self.renderer = OutputRenderer(fixedLines=fixedLines,
+          plotName='Line Crossings')
+      frameCb = self.showFrame
+
+    self.output = self.runner.runOnVideoFrames(self.client, video, PROC_FPS,
+        frameCb=frameCb)
+
+    succeeded = self.output.status == ResultCode.SUCCESS
+    if succeeded and not displayImm:
+      DisplayUtils.showVideoDetections(video, PROC_FPS, self.output,
+          fixedLines=fixedLines, plotName='Line Crossings')
+    return succeeded
   pass
 
   def getOutput(self):
@@ -48,6 +68,9 @@ def main():
   ap.add_argument("-o", "--output", type=str,
     help="path to output pickle file", required=False,
     default='')
+  ap.add_argument('-e', '--end', action='store_true',
+    help='show results at end only',
+    required=False, default=False)
   args = ap.parse_args()
 
   if args.input is None or not os.path.isfile(args.input):
@@ -69,22 +92,22 @@ def main():
   apiExecutor.setLinecrossSettings(lcBoundary, inPoint,
       LineCrossCriteria.LINE_CROSS)
 
-  res = apiExecutor.executeOnVideo(args.input)
-  if not res:
-    print('Fail::failed to execute api',
-        apiExecutor.getOutput().status)
-    sys.exit(-3)
-
-  ## display the results
   ## fixed line to show boundary
   fixedLines = []
   fixedLines.append((
     (points[0][0], points[0][1]),
     (points[1][0], points[1][1])
   ))
+
+  res = apiExecutor.executeOnVideo(args.input, not args.end,
+      fixedLines)
+  if not res:
+    print('Fail::failed to execute api',
+        apiExecutor.getOutput().status)
+    sys.exit(-3)
+
   output = apiExecutor.getOutput()
-  DisplayUtils.showVideoDetections(args.input, PROC_FPS, output,
-      fixedLines=fixedLines, plotName='Line Crossings')
+
   if args.output is not None and len(args.output) > 0:
     dataOut = {}
     dataOut['type'] = 'LinecrossDetection'

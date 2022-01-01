@@ -6,7 +6,7 @@ import pickle
 from api.ttypes import *
 from DetectionApiClientImpl import DetectionApiClient
 from DetectionRunner import DetectionRunner
-from utils import DisplayUtils
+from utils import DisplayUtils, OutputRenderer
 
 class ApiExecutor:
   def __init__(self, host, port):
@@ -17,9 +17,28 @@ class ApiExecutor:
     self.output = None
   pass
 
-  def executeOnVideo(self, video):
-    self.output = self.runner.runOnVideoFrames(self.client, video, 5)
-    return self.output.status == ResultCode.SUCCESS
+  def showFrame(self, frameIndex, frame, sessId, output):
+    self.renderer.addOutput(output, frameIndex)
+    canContinue = self.renderer.render(frame, frameIndex)
+    if not canContinue:
+      self.client.deleteSession(sessId)
+      sys.exit(0)
+  pass
+
+  def executeOnVideo(self, video, displayImm):
+    frameCb = None
+    if displayImm:
+      self.renderer = OutputRenderer(plotName='Mask Violations')
+      frameCb = self.showFrame
+
+    self.output = self.runner.runOnVideoFrames(self.client, video, 5,
+        frameCb=frameCb)
+
+    succeeded = self.output.status == ResultCode.SUCCESS
+    if succeeded and not displayImm:
+      DisplayUtils.showVideoDetections(video, 5, self.output,
+          plotName='Mask Violations')
+    return succeeded
   pass
 
   def getOutput(self):
@@ -41,6 +60,9 @@ def main():
   ap.add_argument("-o", "--output", type=str,
     help="path to output pickle file", required=False,
     default='')
+  ap.add_argument('-e', '--end', action='store_true',
+    help='show results at end only',
+    required=False, default=False)
   args = ap.parse_args()
 
   if args.input is None or not os.path.isfile(args.input):
@@ -48,16 +70,14 @@ def main():
     sys.exit(-1)
 
   apiExecutor = ApiExecutor(args.host, args.port)
-  res = apiExecutor.executeOnVideo(args.input)
+  res = apiExecutor.executeOnVideo(args.input, not args.end)
   if not res:
     print('Fail::failed to execute api',
         apiExecutor.getOutput().status)
     sys.exit(-2)
 
-  ## display the result
   output = apiExecutor.getOutput()
-  DisplayUtils.showVideoDetections(args.input, 5, output,
-      plotName='Mask Violations')
+
   if args.output is not None and len(args.output) > 0:
     dataOut = {}
     dataOut['type'] = 'MaskDetection'

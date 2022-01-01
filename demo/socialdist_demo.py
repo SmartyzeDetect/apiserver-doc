@@ -6,7 +6,7 @@ import pickle
 from api.ttypes import *
 from DetectionApiClientImpl import DetectionApiClient
 from DetectionRunner import DetectionRunner
-from utils import DisplayUtils
+from utils import DisplayUtils, OutputRenderer
 
 class ApiExecutor:
   def __init__(self, host, port):
@@ -21,9 +21,28 @@ class ApiExecutor:
     self.runner.setSocialDistancingSettings(boundary, separation, True)
   pass
 
-  def executeOnVideo(self, video):
-    self.output = self.runner.runOnVideoFrames(self.client, video, 5)
-    return self.output.status == ResultCode.SUCCESS
+  def showFrame(self, frameIndex, frame, sessId, output):
+    self.renderer.addOutput(output, frameIndex)
+    canContinue = self.renderer.render(frame, frameIndex)
+    if not canContinue:
+      self.client.deleteSession(sessId)
+      sys.exit(0)
+  pass
+
+  def executeOnVideo(self, video, displayImm):
+    frameCb = None
+    if displayImm:
+      self.renderer = OutputRenderer(plotName='Social Distance Violations')
+      frameCb = self.showFrame
+
+    self.output = self.runner.runOnVideoFrames(self.client, video, 5,
+        frameCb=frameCb)
+
+    succeeded = self.output.status == ResultCode.SUCCESS
+    if succeeded and not displayImm:
+      DisplayUtils.showVideoDetections(video, 5, self.output,
+          plotName='Social Distance Violations')
+    return succeeded
   pass
 
   def getOutput(self):
@@ -45,6 +64,9 @@ def main():
   ap.add_argument("-o", "--output", type=str,
     help="path to output pickle file", required=False,
     default='')
+  ap.add_argument('-e', '--end', action='store_true',
+    help='show results at end only',
+    required=False, default=False)
   args = ap.parse_args()
 
   if args.input is None or not os.path.isfile(args.input):
@@ -69,16 +91,14 @@ def main():
   separation.append(NormPoint(x=points[5][0], y=points[5][1]))
   apiExecutor.setSocialDistanceSettings(sdBoundary, separation)
 
-  res = apiExecutor.executeOnVideo(args.input)
+  res = apiExecutor.executeOnVideo(args.input, not args.end)
   if not res:
     print('Fail::failed to execute api',
         apiExecutor.getOutput().status)
     sys.exit(-3)
 
-  ## display the results
   output = apiExecutor.getOutput()
-  DisplayUtils.showVideoDetections(args.input, 5, output,
-      plotName='Social Distance Violations')
+
   if args.output is not None and len(args.output) > 0:
     dataOut = {}
     dataOut['type'] = 'SocialDistDetection'

@@ -27,6 +27,182 @@ def getMousePoints(event, x, y, flags, param):
     mousePoints.append((x, y))
 pass
 
+class OutputRenderer:
+  def __init__(self, showPersons=True, showLineCross=True,
+      showSd=True, showMask=True, fixedLines=[], plotPersons=True,
+      plotLineCross=True, plotSd=True, plotMask=True,
+      plotName='Metrics', swapRb=True):
+    ## rendering options
+    self.showPersons = showPersons
+    self.showLineCross = showLineCross
+    self.showSd = showSd
+    self.showMask = showMask
+    self.plotPersons = plotPersons
+    self.plotLineCross = plotLineCross
+    self.plotSd = plotSd
+    self.plotMask = plotMask
+    self.plotName = plotName
+    self.fixedLines = fixedLines
+    self.swapRb = swapRb
+    ## detections by frame
+    self.framePersonDets = {}
+    self.frameLcBeforeDets = {}
+    self.frameLcAfterDets = {}
+    self.frameSdDets = {}
+    self.frameMaskDets = {}
+    ## accumulate plots
+    plotData = []
+    plotNames = []
+    plotColors = []
+    doPlot = plotPersons or plotLineCross or plotSd or plotMask
+    self.lineGraph = None
+    if doPlot:
+      if plotPersons:
+        plotData.append(0)
+        plotColors.append('#FF0000')
+        plotNames.append('person(s)')
+      if plotLineCross:
+        plotData.append(0)
+        plotColors.append('#00FF00')
+        plotNames.append('line crossing(s)')
+      if plotSd:
+        plotData.append(0)
+        plotColors.append('#0000FF')
+        plotNames.append('distance violation(s)')
+      if plotMask:
+        ## no mask entries
+        plotData.append(0)
+        plotColors.append('#0000FF')
+        plotNames.append('mask violation(s)')
+        ## mask entries
+        plotData.append(0)
+        plotColors.append('#00FF00')
+        plotNames.append('mask(s) detected')
+      self.lineGraph = LineGraph(plotName, 10, len(plotData),
+          plotNames, plotColors)
+    pass
+  pass
+
+  def addOutput(self, output, frameIndex):
+    ## limit to high confidence detections if required
+    CONF_THRESHOLD = 0.0
+    for det in output.objDetResult.objects:
+      if det.confidence < CONF_THRESHOLD:
+        continue
+      if det.frameIndex != frameIndex:
+        continue
+      if det.frameIndex not in self.framePersonDets:
+        self.framePersonDets[det.frameIndex] = []
+      self.framePersonDets[det.frameIndex].append(det)
+    for lcPair in output.lineCrossResult.violations:
+      if lcPair.first.confidence < CONF_THRESHOLD or\
+          lcPair.second.confidence < CONF_THRESHOLD:
+        continue
+      if lcPair.first.frameIndex != frameIndex and\
+          lcPair.second.frameIndex != frameIndex:
+        continue
+      if lcPair.second.frameIndex not in self.frameLcBeforeDets:
+        self.frameLcBeforeDets[lcPair.second.frameIndex] = []
+      self.frameLcBeforeDets[lcPair.second.frameIndex].append(
+          lcPair.second)
+      if lcPair.first.frameIndex not in self.frameLcAfterDets:
+        self.frameLcAfterDets[lcPair.first.frameIndex] = []
+      self.frameLcAfterDets[lcPair.first.frameIndex].append(lcPair.first)
+    for sdPair in output.socialDetResult.violations:
+      if sdPair.first.confidence < CONF_THRESHOLD or\
+          sdPair.second.confidence < CONF_THRESHOLD:
+        continue
+      if sdPair.first.frameIndex != frameIndex:
+        continue
+      if sdPair.first.frameIndex not in self.frameSdDets:
+        self.frameSdDets[sdPair.first.frameIndex] = []
+      self.frameSdDets[sdPair.first.frameIndex].append(sdPair.first)
+      self.frameSdDets[sdPair.first.frameIndex].append(sdPair.second)
+    for det in output.maskDetResult.objects:
+      if det.confidence < CONF_THRESHOLD:
+        continue
+      if det.frameIndex != frameIndex:
+        continue
+      if det.frameIndex not in self.frameMaskDets:
+        self.frameMaskDets[det.frameIndex] = []
+      self.frameMaskDets[det.frameIndex].append(det)
+  pass
+
+  def render(self, frame, frameIndex):
+    allDets = []
+    allColors = []
+    plotData = []
+    if self.showPersons:
+      numPersons = 0
+      if frameIndex in self.framePersonDets:
+        pdets = self.framePersonDets[frameIndex]
+        for det in pdets:
+          allDets.append(det)
+          allColors.append(COLOR_PERSON)
+        numPersons = len(pdets)
+      if self.plotPersons:
+        plotData.append(numPersons)
+
+    if self.showLineCross:
+      numLineCrossings = 0
+      if frameIndex in self.frameLcBeforeDets:
+        pdets = self.frameLcBeforeDets[frameIndex]
+        for det in pdets:
+          allDets.append(det)
+          allColors.append(COLOR_LC_BEFORE)
+      if frameIndex in self.frameLcAfterDets:
+        pdets = self.frameLcAfterDets[frameIndex]
+        for det in pdets:
+          allDets.append(det)
+          allColors.append(COLOR_LC_AFTER)
+        numLineCrossings = len(pdets)
+      if self.plotLineCross:
+        plotData.append(numLineCrossings)
+
+    if self.showSd:
+      numSdViolations = 0
+      if frameIndex in self.frameSdDets:
+        pdets = self.frameSdDets[frameIndex]
+        for det in pdets:
+          allDets.append(det)
+          allColors.append(COLOR_DIST_VIOLATION)
+        numSdViolations = len(pdets)
+      if self.plotSd:
+        plotData.append(int(numSdViolations / 2))
+
+    if self.showMask:
+      numNoMasks = 0
+      numMasks = 0
+      if frameIndex in self.frameMaskDets:
+        pdets = self.frameMaskDets[frameIndex]
+        for det in pdets:
+          allDets.append(det)
+          if det.name == "none":
+            allColors.append(COLOR_NO_MASK)
+            numNoMasks += 1
+          else:
+            allColors.append(COLOR_MASK)
+            numMasks += 1
+      if self.plotMask:
+        plotData.append(numNoMasks)
+        plotData.append(numMasks)
+
+    simg = None
+    ## show metrics graph
+    if self.lineGraph is not None:
+      self.lineGraph.update(frameIndex, plotData)
+      simg = self.lineGraph.render()
+
+    ## show video dets
+    texts = []
+    texts.append('Frame Index:{}'.format(frameIndex))
+    if self.swapRb:
+      frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    return DisplayUtils.showFrame(frame, allDets, allColors,
+        texts, self.fixedLines, simg)
+  pass
+pass
+
 class DisplayUtils:
   @staticmethod
   def showFrame(frame, dets, colors, texts, fixedLines, secImg):
@@ -55,7 +231,9 @@ class DisplayUtils:
     key = cv2.waitKey(DEMO_DELAY) & 0xFF
     # if the `q` key was pressed, exit the program
     if key == ord("q"):
-      sys.exit(0)
+      return False
+      #sys.exit(0)
+    return True
   pass
 
   @staticmethod
@@ -64,66 +242,11 @@ class DisplayUtils:
       showMask=True, fixedLines=[], plotPersons=True,
       plotLineCross=True, plotSd=True, plotMask=True,
       plotName='Metrics'):
-    ## accumulate detections by frame
-    framePersonDets = {}
-    frameLcBeforeDets = {}
-    frameLcAfterDets = {}
-    frameSdDets = {}
-    frameMaskDets = {}
-    ## accumulate plots
-    plotData = []
-    plotNames = []
-    plotColors = []
-    doPlot = plotPersons or plotLineCross or plotSd or plotMask
-    lineGraph = None
-    if doPlot:
-      if plotPersons:
-        plotData.append(0)
-        plotColors.append('#FF0000')
-        plotNames.append('person(s)')
-      if plotLineCross:
-        plotData.append(0)
-        plotColors.append('#00FF00')
-        plotNames.append('line crossing(s)')
-      if plotSd:
-        plotData.append(0)
-        plotColors.append('#0000FF')
-        plotNames.append('distance violation(s)')
-      if plotMask:
-        ## no mask entries
-        plotData.append(0)
-        plotColors.append('#0000FF')
-        plotNames.append('mask violation(s)')
-        ## mask entries
-        plotData.append(0)
-        plotColors.append('#00FF00')
-        plotNames.append('mask(s) detected')
-      lineGraph = LineGraph(plotName, 10, len(plotData),
-          plotNames, plotColors)
 
-    for det in output.objDetResult.objects:
-      ## limit to high confidence detections if required
-      #if det.confidence < 0.6:
-        #continue
-      if det.frameIndex not in framePersonDets:
-        framePersonDets[det.frameIndex] = []
-      framePersonDets[det.frameIndex].append(det)
-    for lcPair in output.lineCrossResult.violations:
-      if lcPair.second.frameIndex not in frameLcBeforeDets:
-        frameLcBeforeDets[lcPair.second.frameIndex] = []
-      frameLcBeforeDets[lcPair.second.frameIndex].append(lcPair.second)
-      if lcPair.first.frameIndex not in frameLcAfterDets:
-        frameLcAfterDets[lcPair.first.frameIndex] = []
-      frameLcAfterDets[lcPair.first.frameIndex].append(lcPair.first)
-    for sdPair in output.socialDetResult.violations:
-      if sdPair.first.frameIndex not in frameSdDets:
-        frameSdDets[sdPair.first.frameIndex] = []
-      frameSdDets[sdPair.first.frameIndex].append(sdPair.first)
-      frameSdDets[sdPair.first.frameIndex].append(sdPair.second)
-    for det in output.maskDetResult.objects:
-      if det.frameIndex not in frameMaskDets:
-        frameMaskDets[det.frameIndex] = []
-      frameMaskDets[det.frameIndex].append(det)
+    renderer = OutputRenderer(showPersons, showLineCross, showSd,
+        showMask, fixedLines, plotPersons,
+        plotLineCross, plotSd, plotMask,
+        plotName, swapRb=False)
 
     findex = 0
     vc = cv2.VideoCapture(vidFile)
@@ -143,74 +266,14 @@ class DisplayUtils:
       if (findex // frameModulo) >= 600:
         break
 
-      frame = cv2.resize(frame, (640, 480), interpolation=cv2.INTER_AREA)
-      allDets = []
-      allColors = []
-      plotData = []
+      frame = cv2.resize(frame, (640, 480),
+          interpolation=cv2.INTER_AREA)
       frameIndex = findex // frameModulo
-      if showPersons:
-        numPersons = 0
-        if frameIndex in framePersonDets:
-          pdets = framePersonDets[frameIndex]
-          for det in pdets:
-            allDets.append(det)
-            allColors.append(COLOR_PERSON)
-          numPersons = len(pdets)
-        if plotPersons:
-          plotData.append(numPersons)
-      if showLineCross:
-        numLineCrossings = 0
-        if frameIndex in frameLcBeforeDets:
-          pdets = frameLcBeforeDets[frameIndex]
-          for det in pdets:
-            allDets.append(det)
-            allColors.append(COLOR_LC_BEFORE)
-        if frameIndex in frameLcAfterDets:
-          pdets = frameLcAfterDets[frameIndex]
-          for det in pdets:
-            allDets.append(det)
-            allColors.append(COLOR_LC_AFTER)
-          numLineCrossings = len(pdets)
-        if plotLineCross:
-          plotData.append(numLineCrossings)
-      if showSd:
-        numSdViolations = 0
-        if frameIndex in frameSdDets:
-          pdets = frameSdDets[frameIndex]
-          for det in pdets:
-            allDets.append(det)
-            allColors.append(COLOR_DIST_VIOLATION)
-          numSdViolations = len(pdets)
-        if plotSd:
-          plotData.append(int(numSdViolations / 2))
-      if showMask:
-        numNoMasks = 0
-        numMasks = 0
-        if frameIndex in frameMaskDets:
-          pdets = frameMaskDets[frameIndex]
-          for det in pdets:
-            allDets.append(det)
-            if det.name == "none":
-              allColors.append(COLOR_NO_MASK)
-              numNoMasks += 1
-            else:
-              allColors.append(COLOR_MASK)
-              numMasks += 1
-        if plotMask:
-          plotData.append(numNoMasks)
-          plotData.append(numMasks)
+      renderer.addOutput(output, frameIndex)
+      canContinue = renderer.render(frame, frameIndex)
+      if not canContinue:
+        break
 
-      simg = None
-      ## show metrics graph
-      if lineGraph is not None:
-        lineGraph.update(frameIndex, plotData)
-        simg = lineGraph.render()
-
-      ## show video dets
-      texts = []
-      texts.append('Frame Index:{}'.format(frameIndex))
-      DisplayUtils.showFrame(frame, allDets, allColors,
-          texts, fixedLines, simg)
       findex += 1
     pass
     vc.release()

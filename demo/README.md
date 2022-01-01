@@ -14,7 +14,7 @@ The scripts in this directory provide simple demos for the capabilities of the S
     - opencv-python
     - numpy
     - matplotlib
-  - You need to run the scripts on a machine with a GUI for certain scripts which need configuration of detection settings.
+  - You need to run the scripts on a machine with a GUI for viewing detection results and also for certain scripts that need input.
 
 ## Activation
 

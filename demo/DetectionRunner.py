@@ -123,7 +123,7 @@ class DetectionRunner:
     return output
   pass
 
-  def runOnVideoFrames(self, client, video, fps):
+  def runOnVideoFrames(self, client, video, fps, frameCb=None):
     if video is None or not os.path.isfile(video):
       print('Vf:No input video specified', video)
       output = DetectionOutput()
@@ -162,11 +162,18 @@ class DetectionRunner:
       detInput = DetectionInput(type=DetectionInputType.IMG_BUFFER_RAW,
                                 params=detParams)
 
-      res = client.processInputForSession(sessId, int(findex / frameModulo),
+      frameIndex = (findex // frameModulo)
+      res = client.processInputForSession(sessId, frameIndex,
           detInput)
 
       if res != ResultCode.SUCCESS:
         print('Failed processing frame {} with {}' % (findex, res))
+
+      if frameCb is not None:
+        ## also get current set of results and inform caller
+        sessOut = client.getSessionResult(sessId)
+        frameCb(frameIndex, frame, sessId, sessOut)
+
       findex += 1
     pass
 
