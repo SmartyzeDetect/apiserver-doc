@@ -10,9 +10,7 @@ This repository contains a basic user guide for anyone wishing to try out the AP
 
 The Docker image is hosted on Amazon ECR Public at [link](https://gallery.ecr.aws/j6h6k0h7/ml/sd-apiserver)
 
-For a demo showing the capabilities of the API, visit the link below:
-
-[![SmartyzeDetect API Demo](https://img.youtube.com/vi/zlnMdlDxsyQ/0.jpg)](https://youtu.be/zlnMdlDxsyQ)
+For a demo showing the capabilities of the API, visit [link](https://youtu.be/zlnMdlDxsyQ)
 
 To obtain a free trial license for the API server, use this [page](https://www.smartyzedetect.com/pages/sdkfreetrial)
 
