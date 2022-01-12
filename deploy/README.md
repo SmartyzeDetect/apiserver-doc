@@ -125,3 +125,17 @@ Some behaviors of the API server are configurable by settings certain environmen
     - 0 : No crash handlers will be setup and no minidump will be generated on API server crash (default)
     - 1 : Crash handlers will be setup and minidump will be written to /var/data/ (make sure this path is mapped to a volume that is writable from within the container and presists after the container exits so that you can retrieve the minidump file)
 
+## Machine Compatibility
+
+The SDK requires a host CPU with certain minimum capabilities in order to function. These are listed below in case you are trying to run this on custom hardware or non-cloud environments.
+- 64-bit architecture - CPU & OS
+- SSE4.1, AVX and AVX2 instruction support - CPU & OS
+- F16C support - CPU
+- FMA3 support - CPU
+
+The example above uses Fargate for deploying the API server which works because Fargate for x86 runs on x86-64 based Intel CPUs which have the required CPU capabilities.
+
+For AWS, it is recommended to run on compute optimized instance types as these are meant for ML inference type workloads (both Intel and AMD CPUs should work - tested on c4, c5 and c5a instance types).
+
+For any custom instance type deployments, please check that the API server can run successfully (launch successfully, valid status from getStatus API and successful inference on image/video) before proceeding.
+

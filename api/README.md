@@ -22,7 +22,7 @@ The AI functions of the SDK are centered around sessions created using the SDK. 
 
 ## Session Limits
 
-- Concurrency: The number of concurrent sessions available on an SDK instance is limited by the CPU capabilities and memory (RAM) available on the physical machine or VM it runs on. Running multiple SDK instances on the same physical machine or VM is not supported and will cause issues. A single SDK instance is designed to use the full capabilities on the physical machine or VM it runs on. The concurrent sessions limit is primarily a function of number of CPU cores available to the SDK (if memory is not a limiting factor). So for N cores available, (N - 1) concurrent sessions would be supported (provided memory is not a limiting factor).
+- Concurrency: The number of concurrent sessions available on an SDK instance is limited by the CPU capabilities and memory (RAM) available on the physical machine or VM it runs on. Running multiple SDK instances on the same physical machine or VM is not supported and will cause issues. A single SDK instance is designed to use the full capabilities on the physical machine or VM it runs on. The concurrent sessions limit is primarily a function of number of CPU cores (more specifically number of threads) available to the SDK (if memory is not a limiting factor). So for N threads (equivalency to cores will depend on hyperthreading capabilities on the CPU) available, (N - 1) concurrent sessions would be supported (provided memory is not a limiting factor). Each session will use a thread for execution on the CPU.
 
 - Frame Limit: The number of frames that can be processed within a session is limited to 600. Using a session for processing frames beyond this limit will result in an error being returned from the API.
 

@@ -14,3 +14,5 @@ For a demo showing the capabilities of the API, visit [link](https://youtu.be/zl
 
 To obtain a free trial license for the API server, use this [page](https://www.smartyzedetect.com/pages/sdkfreetrial)
 
+To learn more about SmartyzeDetect, visit [link](https://www.smartyzedetect.com)
+
