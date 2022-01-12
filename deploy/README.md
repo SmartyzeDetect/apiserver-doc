@@ -128,7 +128,8 @@ Some behaviors of the API server are configurable by settings certain environmen
 ## Machine Compatibility
 
 The SDK requires a host CPU with certain minimum capabilities in order to function. These are listed below in case you are trying to run this on custom hardware or non-cloud environments.
-- 64-bit architecture - CPU & OS
+- x86 architecture - CPU
+- 64-bit support - CPU & OS
 - SSE4.1, AVX and AVX2 instruction support - CPU & OS
 - F16C support - CPU
 - FMA3 support - CPU
