@@ -19,8 +19,14 @@ all_structs = []
 
 
 class Iface(object):
+    """
+    Detection API
+
+    """
     def init(self, request):
         """
+        Init API server with license
+
         Parameters:
          - request
 
@@ -28,13 +34,23 @@ class Iface(object):
         pass
 
     def getStatus(self):
+        """
+        Get API server status
+
+        """
         pass
 
     def destroy(self):
+        """
+        Stop API server
+
+        """
         pass
 
     def createSession(self, settings):
         """
+        Create new detection session
+
         Parameters:
          - settings
 
@@ -42,10 +58,16 @@ class Iface(object):
         pass
 
     def getSessions(self):
+        """
+        Retrieve list of active sessions
+
+        """
         pass
 
     def deleteSession(self, sessionId):
         """
+        Delete an active session
+
         Parameters:
          - sessionId
 
@@ -54,6 +76,8 @@ class Iface(object):
 
     def clearSession(self, sessionId):
         """
+        Clear an active session (finalize temporary detections and retrieve output)
+
         Parameters:
          - sessionId
 
@@ -62,6 +86,8 @@ class Iface(object):
 
     def getSessionResult(self, sessionId):
         """
+        Get output for an active session
+
         Parameters:
          - sessionId
 
@@ -70,6 +96,8 @@ class Iface(object):
 
     def processInputForSession(self, sessionId, frameIndex, input):
         """
+        Feed input for a detection session (typically used with videos)
+
         Parameters:
          - sessionId
          - frameIndex
@@ -80,6 +108,8 @@ class Iface(object):
 
     def runDetection(self, input, settings):
         """
+        Combo API call to run detection and retrieve output in one-shot
+
         Parameters:
          - input
          - settings
@@ -89,6 +119,10 @@ class Iface(object):
 
 
 class Client(Iface):
+    """
+    Detection API
+
+    """
     def __init__(self, iprot, oprot=None):
         self._iprot = self._oprot = iprot
         if oprot is not None:
@@ -97,6 +131,8 @@ class Client(Iface):
 
     def init(self, request):
         """
+        Init API server with license
+
         Parameters:
          - request
 
@@ -128,6 +164,10 @@ class Client(Iface):
         raise TApplicationException(TApplicationException.MISSING_RESULT, "init failed: unknown result")
 
     def getStatus(self):
+        """
+        Get API server status
+
+        """
         self.send_getStatus()
         return self.recv_getStatus()
 
@@ -154,6 +194,10 @@ class Client(Iface):
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getStatus failed: unknown result")
 
     def destroy(self):
+        """
+        Stop API server
+
+        """
         self.send_destroy()
         return self.recv_destroy()
 
@@ -181,6 +225,8 @@ class Client(Iface):
 
     def createSession(self, settings):
         """
+        Create new detection session
+
         Parameters:
          - settings
 
@@ -212,6 +258,10 @@ class Client(Iface):
         raise TApplicationException(TApplicationException.MISSING_RESULT, "createSession failed: unknown result")
 
     def getSessions(self):
+        """
+        Retrieve list of active sessions
+
+        """
         self.send_getSessions()
         return self.recv_getSessions()
 
@@ -239,6 +289,8 @@ class Client(Iface):
 
     def deleteSession(self, sessionId):
         """
+        Delete an active session
+
         Parameters:
          - sessionId
 
@@ -271,6 +323,8 @@ class Client(Iface):
 
     def clearSession(self, sessionId):
         """
+        Clear an active session (finalize temporary detections and retrieve output)
+
         Parameters:
          - sessionId
 
@@ -303,6 +357,8 @@ class Client(Iface):
 
     def getSessionResult(self, sessionId):
         """
+        Get output for an active session
+
         Parameters:
          - sessionId
 
@@ -335,6 +391,8 @@ class Client(Iface):
 
     def processInputForSession(self, sessionId, frameIndex, input):
         """
+        Feed input for a detection session (typically used with videos)
+
         Parameters:
          - sessionId
          - frameIndex
@@ -371,6 +429,8 @@ class Client(Iface):
 
     def runDetection(self, input, settings):
         """
+        Combo API call to run detection and retrieve output in one-shot
+
         Parameters:
          - input
          - settings
@@ -1197,11 +1257,11 @@ class getSessions_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype59, _size56) = iprot.readListBegin()
-                    for _i60 in range(_size56):
-                        _elem61 = DetectionSession()
-                        _elem61.read(iprot)
-                        self.success.append(_elem61)
+                    (_etype80, _size77) = iprot.readListBegin()
+                    for _i81 in range(_size77):
+                        _elem82 = DetectionSession()
+                        _elem82.read(iprot)
+                        self.success.append(_elem82)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1218,8 +1278,8 @@ class getSessions_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter62 in self.success:
-                iter62.write(oprot)
+            for iter83 in self.success:
+                iter83.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()

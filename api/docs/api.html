@@ -207,8 +207,11 @@ code { line-height: 20px; }
 <li><a href="#Fn_DetectionApi_runDetection">runDetection</a></li>
 </ul>
 </td>
-<td><a href="#Enum_CrossDirection">CrossDirection</a><br/>
+<td><a href="#Struct_AlprResult">AlprResult</a><br/>
+<a href="#Struct_AlprSettings">AlprSettings</a><br/>
+<a href="#Enum_CrossDirection">CrossDirection</a><br/>
 <a href="#Struct_DetectedObject">DetectedObject</a><br/>
+<a href="#Struct_DetectedText">DetectedText</a><br/>
 <a href="#Struct_DetectionArea">DetectionArea</a><br/>
 <a href="#Struct_DetectionAreaSettings">DetectionAreaSettings</a><br/>
 <a href="#Struct_DetectionCapability">DetectionCapability</a><br/>
@@ -224,6 +227,8 @@ code { line-height: 20px; }
 <a href="#Struct_ImageFileInput">ImageFileInput</a><br/>
 <a href="#Struct_InitRequest">InitRequest</a><br/>
 <a href="#Struct_InputParams">InputParams</a><br/>
+<a href="#Struct_LicensePlate">LicensePlate</a><br/>
+<a href="#Struct_LicensePlateNumber">LicensePlateNumber</a><br/>
 <a href="#Enum_LineCrossCriteria">LineCrossCriteria</a><br/>
 <a href="#Struct_LineCrossDetectionResult">LineCrossDetectionResult</a><br/>
 <a href="#Struct_LineCrossSettings">LineCrossSettings</a><br/>
@@ -247,7 +252,7 @@ code { line-height: 20px; }
 </tr></tbody></table>
 <hr/><h2 id="Constants">Constants</h2>
 <table class="table-bordered table-striped table-condensed"><thead><tr><th>Constant</th><th>Type</th><th>Value</th></tr></thead><tbody>
-<tr id="Const_API_VERSION"><td><code>API_VERSION</code></td><td><code>string</code></td><td><code>"1.0.0"</code></td></tr><tr><td colspan="3"><blockquote><pre>API version - follows semantic versioning
+<tr id="Const_API_VERSION"><td><code>API_VERSION</code></td><td><code>string</code></td><td><code>"2.0.0"</code></td></tr><tr><td colspan="3"><blockquote><pre>API version - follows semantic versioning
 </pre><br/></blockquote></td></tr></tbody></table><hr/><h2 id="Enumerations">Enumerations</h2>
 <div class="definition"><h3 id="Enum_ResultCode">Enumeration: ResultCode</h3>
 <pre>Result codes for APIs
@@ -441,6 +446,17 @@ of an object bounding box as reference
 <tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether mask detection is enabled
 </td><td>required</td><td></td></tr>
 </tbody></table><br/><pre>Mask detection settings
+</pre><br/></div><div class="definition"><h3 id="Struct_AlprSettings">Struct: AlprSettings</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>enabled</td><td><code>bool</code></td><td>whether ALPR is enabled
+</td><td>required</td><td></td></tr>
+<tr><td>2</td><td>region</td><td><code>string</code></td><td>region code to be used for ALPR
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>skipVehicleCheck</td><td><code>bool</code></td><td>whether to skip vehicle check for license plate detection
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>presetMode</td><td><code>string</code></td><td>preset mode specifying speed/accuracy tradeoff - default is 'medium'
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Automatic License Plate Recognition (ALPR) settings
 </pre><br/></div><div class="definition"><h3 id="Struct_DetectionSettings">Struct: DetectionSettings</h3>
 <table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
 <tr><td>1</td><td>objSettings</td><td><code><a href="#Struct_ObjectDetectionSettings">ObjectDetectionSettings</a></code></td><td>Object detection settings
@@ -452,6 +468,8 @@ of an object bounding box as reference
 <tr><td>4</td><td>lineCrossSettings</td><td><code><a href="#Struct_LineCrossSettings">LineCrossSettings</a></code></td><td>Line cross settings
 </td><td>default</td><td></td></tr>
 <tr><td>5</td><td>maskSettings</td><td><code><a href="#Struct_MaskDetectionSettings">MaskDetectionSettings</a></code></td><td>Mask detection settings
+</td><td>default</td><td></td></tr>
+<tr><td>6</td><td>alprSettings</td><td><code><a href="#Struct_AlprSettings">AlprSettings</a></code></td><td>ALPR settings
 </td><td>default</td><td></td></tr>
 </tbody></table><br/><pre>Detection settings for a session
 </pre><br/></div><div class="definition"><h3 id="Struct_DetectionSession">Struct: DetectionSession</h3>
@@ -527,7 +545,7 @@ of an object bounding box as reference
 </td><td>default</td><td></td></tr>
 <tr><td>7</td><td>frameIndex</td><td><code>i32</code></td><td>index of frame (for videos) where object was detected
 </td><td>default</td><td></td></tr>
-<tr><td>8</td><td>confidence</td><td><code>double</code></td><td>confidence of detection score [0, 1]
+<tr><td>8</td><td>confidence</td><td><code>double</code></td><td>confidence score of detection [0, 1]
 </td><td>default</td><td></td></tr>
 <tr><td>9</td><td>direction</td><td><code><a href="#Enum_CrossDirection">CrossDirection</a></code></td><td>line cross direction (if applicable)
 </td><td>default</td><td></td></tr>
@@ -564,6 +582,62 @@ of an object bounding box as reference
 <tr><td>1</td><td>objects</td><td><code>list&lt;<code><a href="#Struct_DetectedObject">DetectedObject</a></code>&gt;</code></td><td>list of mask (violations and compliant) objects
 </td><td>default</td><td></td></tr>
 </tbody></table><br/><pre>Mask detection results
+</pre><br/></div><div class="definition"><h3 id="Struct_DetectedText">Struct: DetectedText</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>text</td><td><code>string</code></td><td>detected text in utf-8 encoding
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>topLeftY</td><td><code>double</code></td><td>top-left y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>topLeftX</td><td><code>double</code></td><td>top-left x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>topRightY</td><td><code>double</code></td><td>top-right y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>5</td><td>topRightX</td><td><code>double</code></td><td>top-right x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>6</td><td>bottomRightY</td><td><code>double</code></td><td>bottom-right y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>7</td><td>bottomRightX</td><td><code>double</code></td><td>bottom-right x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>8</td><td>bottomLeftY</td><td><code>double</code></td><td>bottom-left y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>9</td><td>bottomLeftX</td><td><code>double</code></td><td>bottom-left x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>10</td><td>confidence</td><td><code>double</code></td><td>confidence score of detection [0, 1]
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>Detected Text descriptor
+</pre><br/></div><div class="definition"><h3 id="Struct_LicensePlateNumber">Struct: LicensePlateNumber</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>plate</td><td><code>string</code></td><td>license plate number in utf-8 encoding
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>confidence</td><td><code>double</code></td><td>confidence of detection [0, 1]
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>License Plate Number descriptor
+</pre><br/></div><div class="definition"><h3 id="Struct_LicensePlate">Struct: LicensePlate</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>detections</td><td><code>list&lt;<code><a href="#Struct_LicensePlateNumber">LicensePlateNumber</a></code>&gt;</code></td><td>license plate number detections for this plate
+</td><td>default</td><td></td></tr>
+<tr><td>2</td><td>objectId</td><td><code>i32</code></td><td>unique object id for object within session
+</td><td>default</td><td></td></tr>
+<tr><td>3</td><td>top</td><td><code>double</code></td><td>top-left y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>4</td><td>left</td><td><code>double</code></td><td>top-left x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>5</td><td>bottom</td><td><code>double</code></td><td>bottom-right y co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>6</td><td>right</td><td><code>double</code></td><td>bottom-right x co-ordinate normalized [0,1]
+</td><td>default</td><td></td></tr>
+<tr><td>7</td><td>frameIndex</td><td><code>i32</code></td><td>index of frame (for videos) where object was detected
+</td><td>default</td><td></td></tr>
+<tr><td>8</td><td>confidence</td><td><code>double</code></td><td>confidence of detection score [0, 1]
+</td><td>default</td><td></td></tr>
+<tr><td>9</td><td>associatedText</td><td><code>list&lt;<code><a href="#Struct_DetectedText">DetectedText</a></code>&gt;</code></td><td>associated text found with license plate
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>License plate descriptor
+</pre><br/></div><div class="definition"><h3 id="Struct_AlprResult">Struct: AlprResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
+<tr><td>1</td><td>objects</td><td><code>list&lt;<code><a href="#Struct_LicensePlate">LicensePlate</a></code>&gt;</code></td><td>list of ALPR detections
+</td><td>default</td><td></td></tr>
+</tbody></table><br/><pre>ALPR results
 </pre><br/></div><div class="definition"><h3 id="Struct_DetectionOutput">Struct: DetectionOutput</h3>
 <table class="table-bordered table-striped table-condensed"><thead><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr></thead><tbody>
 <tr><td>1</td><td>status</td><td><code><a href="#Enum_ResultCode">ResultCode</a></code></td><td>Detection status code
@@ -575,6 +649,8 @@ of an object bounding box as reference
 <tr><td>4</td><td>lineCrossResult</td><td><code><a href="#Struct_LineCrossDetectionResult">LineCrossDetectionResult</a></code></td><td>line crossing detections
 </td><td>optional</td><td></td></tr>
 <tr><td>5</td><td>maskDetResult</td><td><code><a href="#Struct_MaskDetectionResult">MaskDetectionResult</a></code></td><td>mask detections
+</td><td>optional</td><td></td></tr>
+<tr><td>6</td><td>alprResult</td><td><code><a href="#Struct_AlprResult">AlprResult</a></code></td><td>ALPR detections
 </td><td>optional</td><td></td></tr>
 </tbody></table><br/><pre>Detection output descriptor
 </pre><br/></div><hr/><h2 id="Services">Services</h2>

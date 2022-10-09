@@ -13,6 +13,8 @@ response = ecs_client.register_task_definition(
         {
             'name': 'apiserver',
             'image': IMAGE_NAME,
+            'cpu': 4096,
+            'memory': 8192,
             'portMappings': [
                 {
                     'containerPort': 9090,
@@ -24,13 +26,24 @@ response = ecs_client.register_task_definition(
             'environment': [
                 {
                     'name': 'SD_API_TRANSPORT',
-                    'value': '1'  ## 1 - tcp socket, 2 - unix socket
+                    'value': '1'  ## 1 - tcp socket, 2 - unix socket, 4 - http/REST
                 },
                 {
                     'name': 'SD_API_TCP_LOCAL',
                     'value': '0'  ## 0 - bind to all ips, 1 - bind only to localhost ip
                 },
             ],
+            ## awslogs configuration (also requires IAM policy to include
+            ## create log groups permission)
+            #'logConfiguration': {
+                #'logDriver': 'awslogs',
+                #'options': {
+                    #'awslogs-create-group': 'true',
+                    #'awslogs-group': 'dev-ml-apiserver',
+                    #'awslogs-region': 'ap-south-1',
+                    #'awslogs-stream-prefix': 'dev-ml-apiserver'
+                #}
+            #},
             'mountPoints': [
                 {
                     'sourceVolume': 'data',
@@ -48,8 +61,8 @@ response = ecs_client.register_task_definition(
     requiresCompatibilities=[
         'FARGATE',
     ],
-    cpu='1024',
-    memory='2048',
+    cpu='4096',
+    memory='8192',
 )
 pprint(response)
 

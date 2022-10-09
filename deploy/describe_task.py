@@ -52,5 +52,6 @@ if len(ipAddrs) == 0:
   print('Fail::no ip addresses found on enis')
   sys.exit(-4)
 
+print('Success::found api server instance running at IP Address:')
 pprint(ipAddrs)
 

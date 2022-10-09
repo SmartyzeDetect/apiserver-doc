@@ -5,7 +5,8 @@ import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-DEMO_DELAY = 100 # (ms) set to 0 for wait until key-press
+HAVE_DISPLAY = 1
+DEMO_DELAY = 0 # (ms) set to 0 for wait until key-press
 
 COLOR_PERSON = (255, 0, 0)
 COLOR_LC_BEFORE = (0, 255, 0)
@@ -13,6 +14,7 @@ COLOR_LC_AFTER = (0, 0, 255)
 COLOR_DIST_VIOLATION = (0, 0, 255)
 COLOR_NO_MASK = (0, 0, 255)
 COLOR_MASK = (0, 255, 0)
+COLOR_PLATE = (255, 0, 0)
 FIXED_LINE_COLOR = (0, 0, 255)
 
 mousePoints = []
@@ -29,14 +31,15 @@ pass
 
 class OutputRenderer:
   def __init__(self, showPersons=True, showLineCross=True,
-      showSd=True, showMask=True, fixedLines=[], plotPersons=True,
-      plotLineCross=True, plotSd=True, plotMask=True,
+      showSd=True, showMask=True, showLpr=True, fixedLines=[],
+      plotPersons=True, plotLineCross=True, plotSd=True, plotMask=True,
       plotName='Metrics', swapRb=True):
     ## rendering options
     self.showPersons = showPersons
     self.showLineCross = showLineCross
     self.showSd = showSd
     self.showMask = showMask
+    self.showLpr = showLpr
     self.plotPersons = plotPersons
     self.plotLineCross = plotLineCross
     self.plotSd = plotSd
@@ -50,6 +53,7 @@ class OutputRenderer:
     self.frameLcAfterDets = {}
     self.frameSdDets = {}
     self.frameMaskDets = {}
+    self.frameLprDets = {}
     ## accumulate plots
     plotData = []
     plotNames = []
@@ -126,6 +130,12 @@ class OutputRenderer:
       if det.frameIndex not in self.frameMaskDets:
         self.frameMaskDets[det.frameIndex] = []
       self.frameMaskDets[det.frameIndex].append(det)
+    for det in output.alprResult.objects:
+      if det.frameIndex != frameIndex:
+        continue
+      if det.frameIndex not in self.frameLprDets:
+        self.frameLprDets[det.frameIndex] = []
+      self.frameLprDets[det.frameIndex].append(det)
   pass
 
   def render(self, frame, frameIndex):
@@ -187,6 +197,26 @@ class OutputRenderer:
         plotData.append(numNoMasks)
         plotData.append(numMasks)
 
+    texts = []
+    boxTexts = {}
+    if self.showLpr:
+      numLprs = 0
+      if frameIndex in self.frameLprDets:
+        pdets = self.frameLprDets[frameIndex]
+        for det in pdets:
+          allDets.append(det)
+          allColors.append(COLOR_PLATE)
+          numLprs += 1
+          ## add lpr text to be displayed
+          boxTexts[len(allDets) - 1] = det.detections[0].plate
+          for i, lp in enumerate(det.detections):
+            texts.append('Plate ID({}) #{}:{}'.format(numLprs, i,
+                lp.plate))
+            if False:
+              print('Fid({}): Plate ID({}) #{}:{}'.format(frameIndex,
+                  numLprs, i, lp.plate))
+    pass
+ 
     simg = None
     ## show metrics graph
     if self.lineGraph is not None:
@@ -194,18 +224,17 @@ class OutputRenderer:
       simg = self.lineGraph.render()
 
     ## show video dets
-    texts = []
     texts.append('Frame Index:{}'.format(frameIndex))
     if self.swapRb:
       frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     return DisplayUtils.showFrame(frame, allDets, allColors,
-        texts, self.fixedLines, simg)
+        texts, self.fixedLines, simg, boxTexts=boxTexts)
   pass
 pass
 
 class DisplayUtils:
   @staticmethod
-  def showFrame(frame, dets, colors, texts, fixedLines, secImg):
+  def showFrame(frame, dets, colors, texts, fixedLines, secImg, boxTexts={}):
     (H, W) = frame.shape[:2]
     # draw detection boxes
     for i in range(len(dets)):
@@ -213,6 +242,26 @@ class DisplayUtils:
       coords = [det.left, det.top, det.right, det.bottom]
       (x1, y1, x2, y2) = BoxUtils.bboxNormToAbs(coords, W, H)
       cv2.rectangle(frame, (x1, y1), (x2, y2), colors[i], 2)
+      ## draw any box related texts
+      if i in boxTexts:
+        textColor = (255, 255, 255)
+        label = boxTexts[i]
+        fontScale = 0.7
+        fontThickness = 2
+        font = cv2.FONT_HERSHEY_SIMPLEX
+
+        # For the text background find space required by the text
+        # so that we can add a background with same width
+        (w, h), _ = cv2.getTextSize(label, font, fontScale, fontThickness)
+        textPadding = int(h / 2)
+        img = cv2.rectangle(frame, (x1, y1 - h - textPadding), (x1 + w, y1),
+            colors[i], -1)
+        # Prints the text
+        img = cv2.putText(frame, label, (x1, y1 - int(textPadding / 2)),
+            font, fontScale, textColor, fontThickness)
+      pass
+    pass
+
     # draw any fixed lines
     lines = BoxUtils.pointPairsNormToAbs(fixedLines, W, H)
     for line in lines:
@@ -222,29 +271,31 @@ class DisplayUtils:
       text = texts[i]
       cv2.putText(frame, text, (10, H - ((i * 20) + 20)),
         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-
     # combine a secondary image if provided
     if secImg is not None:
       frame = np.hstack((frame, secImg))
     # show the output frame
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(DEMO_DELAY) & 0xFF
-    # if the `q` key was pressed, exit the program
-    if key == ord("q"):
-      return False
-      #sys.exit(0)
+    if HAVE_DISPLAY:
+      cv2.imshow("Frame", frame)
+      key = cv2.waitKey(DEMO_DELAY) & 0xFF
+      # if the `q` key was pressed, exit the program
+      if key == ord("q"):
+        return False
+        #sys.exit(0)
+    else:
+      cv2.imwrite('result.jpg', frame)
     return True
   pass
 
   @staticmethod
   def showVideoDetections(vidFile, fps, output,
       showPersons=True, showLineCross=True, showSd=True,
-      showMask=True, fixedLines=[], plotPersons=True,
+      showMask=True, showLpr=True, fixedLines=[], plotPersons=True,
       plotLineCross=True, plotSd=True, plotMask=True,
       plotName='Metrics'):
 
     renderer = OutputRenderer(showPersons, showLineCross, showSd,
-        showMask, fixedLines, plotPersons,
+        showMask, showLpr, fixedLines, plotPersons,
         plotLineCross, plotSd, plotMask,
         plotName, swapRb=False)
 
@@ -283,6 +334,9 @@ class DisplayUtils:
 
   @staticmethod
   def scanPoints(vidFile, numPoints, windowTitle):
+    if not HAVE_DISPLAY:
+      print('Fail::No display available, cannot select points')
+      return (False, [])
     # Get first frame from video
     cap = cv2.VideoCapture(vidFile)
     if not cap.isOpened():

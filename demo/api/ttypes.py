@@ -17,6 +17,10 @@ all_structs = []
 
 
 class ResultCode(object):
+    """
+    Result codes for APIs
+
+    """
     SUCCESS = 1
     ERR_GENERIC = 2
     ERR_BUSY = 3
@@ -44,6 +48,10 @@ class ResultCode(object):
 
 
 class ObjectDetectionEnv(object):
+    """
+    Object detection accuracy/speed setting
+
+    """
     NORMAL = 1
     BUSY = 2
     VERY_BUSY = 3
@@ -62,6 +70,10 @@ class ObjectDetectionEnv(object):
 
 
 class LineCrossCriteria(object):
+    """
+    Line cross criteria for line cross settings
+
+    """
     LINE_CROSS = 1
     LINE_SEGMENT_CROSS = 2
     LINE_CROSS_BOTH_DIR = 3
@@ -83,6 +95,10 @@ class LineCrossCriteria(object):
 
 
 class ObjectType(object):
+    """
+    Detection object type
+
+    """
     PERSON = 1
 
     _VALUES_TO_NAMES = {
@@ -95,6 +111,10 @@ class ObjectType(object):
 
 
 class DetectionInputType(object):
+    """
+    Detection input type
+
+    """
     IMG_BUFFER_RAW = 1
     IMG_BUFFER_ENCODED = 2
     IMG_FILE_PATH = 3
@@ -116,6 +136,10 @@ class DetectionInputType(object):
 
 
 class ImageBufferFormat(object):
+    """
+    Raw image pixel format
+
+    """
     RGB_HWC = 1
 
     _VALUES_TO_NAMES = {
@@ -128,6 +152,10 @@ class ImageBufferFormat(object):
 
 
 class EncodedImageFormat(object):
+    """
+    Encoded image format type
+
+    """
     JPEG = 1
 
     _VALUES_TO_NAMES = {
@@ -140,6 +168,10 @@ class EncodedImageFormat(object):
 
 
 class CrossDirection(object):
+    """
+    Line cross direction
+
+    """
     UNKNOWN = 0
     CROSS_IN = 1
     CROSS_OUT = 2
@@ -159,8 +191,10 @@ class CrossDirection(object):
 
 class InitRequest(object):
     """
+    API server initialization request
+
     Attributes:
-     - license
+     - license: License for activation
 
     """
 
@@ -216,8 +250,10 @@ class InitRequest(object):
 
 class DetectionCapability(object):
     """
+    Detection capabilities of instance where API server is running
+
     Attributes:
-     - numConcurrentSessions
+     - numConcurrentSessions: Number of possible concurrent detection sessions
 
     """
 
@@ -273,12 +309,14 @@ class DetectionCapability(object):
 
 class DetectorStatus(object):
     """
+    API server status
+
     Attributes:
-     - version
-     - apiVersion
-     - initStatus
-     - capability
-     - activationChallenge
+     - version: S/W version of the server
+     - apiVersion: API version of the server
+     - initStatus: Initialization status of the server
+     - capability: Detection capability of server instance
+     - activationChallenge: Activation challenge for license in offline mode
 
     """
 
@@ -375,11 +413,13 @@ class DetectorStatus(object):
 
 class ObjectDetectionSettings(object):
     """
+    Settings for object detection
+
     Attributes:
-     - enabled
-     - env
-     - objectType
-     - detectOnlyMovingObjects
+     - enabled: whether object detection is enabled
+     - env: object detection accuracy/speed setting
+     - objectType: object detection type
+     - detectOnlyMovingObjects: whether to ignore static objects
 
     """
 
@@ -467,12 +507,14 @@ class ObjectDetectionSettings(object):
 
 class DetectionArea(object):
     """
+    Object detection area descriptor
+
     Attributes:
-     - top
-     - left
-     - bottom
-     - right
-     - name
+     - top: top left y co-ordinate normalized [0, 1]
+     - left: top left x co-ordinate normalized [0, 1]
+     - bottom: bottom right y co-ordinate normalized [0, 1]
+     - right: bottom right x co-ordinate normalized [0, 1]
+     - name: friendly name of the area
 
     """
 
@@ -568,9 +610,11 @@ class DetectionArea(object):
 
 class DetectionAreaSettings(object):
     """
+    Detection area settings
+
     Attributes:
-     - enabled
-     - areas
+     - enabled: whether object detection within areas only is enabled
+     - areas: list of object detection areas (max of 2)
 
     """
 
@@ -647,9 +691,14 @@ class DetectionAreaSettings(object):
 
 class NormPoint(object):
     """
+    Normalized co-ordinate descriptor
+    Co-ordinate system: Top left of image is (0,0)
+    x increases from left to right
+    y increases from top to bottom
+
     Attributes:
-     - x
-     - y
+     - x: x co-ordinate normalized [0,1]
+     - y: y co-ordinate normalized [0,1]
 
     """
 
@@ -719,10 +768,12 @@ class NormPoint(object):
 
 class SocialDistanceSettings(object):
     """
+    Social distancing detection settings
+
     Attributes:
-     - enabled
-     - groundBoundary
-     - minSeparation
+     - enabled: whether social distancing violation detection is enabled
+     - groundBoundary: 4 points indicating a rectangular area on the ground in view
+     - minSeparation: 2 points indicating the minimum separation on the ground
 
     """
 
@@ -818,11 +869,15 @@ class SocialDistanceSettings(object):
 
 class LineCrossSettings(object):
     """
+    Line crossing detection settings
+    Note: A line cross is considered using the bottom middle point
+    of an object bounding box as reference
+
     Attributes:
-     - enabled
-     - boundary
-     - inPoint
-     - crossCriteria
+     - enabled: whether line crossing detection is enabled
+     - boundary: 2 points on the ground in view indicating the line to monitor
+     - inPoint: 1 point denoting the 'in' side of the line
+     - crossCriteria: Line cross mode to detect
 
     """
 
@@ -920,8 +975,10 @@ class LineCrossSettings(object):
 
 class MaskDetectionSettings(object):
     """
+    Mask detection settings
+
     Attributes:
-     - enabled
+     - enabled: whether mask detection is enabled
 
     """
 
@@ -977,24 +1034,122 @@ class MaskDetectionSettings(object):
         return not (self == other)
 
 
+class AlprSettings(object):
+    """
+    Automatic License Plate Recognition (ALPR) settings
+
+    Attributes:
+     - enabled: whether ALPR is enabled
+     - region: region code to be used for ALPR
+     - skipVehicleCheck: whether to skip vehicle check for license plate detection
+     - presetMode: preset mode specifying speed/accuracy tradeoff - default is 'medium'
+
+    """
+
+
+    def __init__(self, enabled=None, region=None, skipVehicleCheck=None, presetMode=None,):
+        self.enabled = enabled
+        self.region = region
+        self.skipVehicleCheck = skipVehicleCheck
+        self.presetMode = presetMode
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.BOOL:
+                    self.enabled = iprot.readBool()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.region = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.BOOL:
+                    self.skipVehicleCheck = iprot.readBool()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.STRING:
+                    self.presetMode = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('AlprSettings')
+        if self.enabled is not None:
+            oprot.writeFieldBegin('enabled', TType.BOOL, 1)
+            oprot.writeBool(self.enabled)
+            oprot.writeFieldEnd()
+        if self.region is not None:
+            oprot.writeFieldBegin('region', TType.STRING, 2)
+            oprot.writeString(self.region.encode('utf-8') if sys.version_info[0] == 2 else self.region)
+            oprot.writeFieldEnd()
+        if self.skipVehicleCheck is not None:
+            oprot.writeFieldBegin('skipVehicleCheck', TType.BOOL, 3)
+            oprot.writeBool(self.skipVehicleCheck)
+            oprot.writeFieldEnd()
+        if self.presetMode is not None:
+            oprot.writeFieldBegin('presetMode', TType.STRING, 4)
+            oprot.writeString(self.presetMode.encode('utf-8') if sys.version_info[0] == 2 else self.presetMode)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.enabled is None:
+            raise TProtocolException(message='Required field enabled is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
 class DetectionSettings(object):
     """
+    Detection settings for a session
+
     Attributes:
-     - objSettings
-     - sdSettings
-     - detAreaSettings
-     - lineCrossSettings
-     - maskSettings
+     - objSettings: Object detection settings
+     - sdSettings: Social distancing detection settings
+     - detAreaSettings: Area detection settings
+     - lineCrossSettings: Line cross settings
+     - maskSettings: Mask detection settings
+     - alprSettings: ALPR settings
 
     """
 
 
-    def __init__(self, objSettings=None, sdSettings=None, detAreaSettings=None, lineCrossSettings=None, maskSettings=None,):
+    def __init__(self, objSettings=None, sdSettings=None, detAreaSettings=None, lineCrossSettings=None, maskSettings=None, alprSettings=None,):
         self.objSettings = objSettings
         self.sdSettings = sdSettings
         self.detAreaSettings = detAreaSettings
         self.lineCrossSettings = lineCrossSettings
         self.maskSettings = maskSettings
+        self.alprSettings = alprSettings
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -1035,6 +1190,12 @@ class DetectionSettings(object):
                     self.maskSettings.read(iprot)
                 else:
                     iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.STRUCT:
+                    self.alprSettings = AlprSettings()
+                    self.alprSettings.read(iprot)
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -1065,6 +1226,10 @@ class DetectionSettings(object):
             oprot.writeFieldBegin('maskSettings', TType.STRUCT, 5)
             self.maskSettings.write(oprot)
             oprot.writeFieldEnd()
+        if self.alprSettings is not None:
+            oprot.writeFieldBegin('alprSettings', TType.STRUCT, 6)
+            self.alprSettings.write(oprot)
+            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -1085,9 +1250,11 @@ class DetectionSettings(object):
 
 class DetectionSession(object):
     """
+    Detection session descriptor
+
     Attributes:
-     - id
-     - detectionSettings
+     - id: A unique id of the session
+     - detectionSettings: Detection settings for the session
 
     """
 
@@ -1154,11 +1321,13 @@ class DetectionSession(object):
 
 class RawImageInput(object):
     """
+    Raw image input
+
     Attributes:
-     - width
-     - height
-     - format
-     - buffer
+     - width: width of image
+     - height: height of image
+     - format: image pixel format
+     - buffer: image buffer
 
     """
 
@@ -1244,10 +1413,12 @@ class RawImageInput(object):
 
 class EncodedImageInput(object):
     """
+    Encoded image input
+
     Attributes:
-     - format
-     - buffer
-     - bufferLength
+     - format: encoding format of image
+     - buffer: encoded image buffer
+     - bufferLength: buffer length
 
     """
 
@@ -1323,8 +1494,10 @@ class EncodedImageInput(object):
 
 class ImageFileInput(object):
     """
+    Image file based input
+
     Attributes:
-     - filename
+     - filename: path to image file
 
     """
 
@@ -1380,9 +1553,11 @@ class ImageFileInput(object):
 
 class VideoFileInput(object):
     """
+    Video file based input
+
     Attributes:
-     - filename
-     - processFps
+     - filename: path to video file
+     - processFps: processing FPS for video (max 10)
 
     """
 
@@ -1448,11 +1623,13 @@ class VideoFileInput(object):
 
 class InputParams(object):
     """
+    Media input for detection
+
     Attributes:
-     - rawImageInput
-     - encImageInput
-     - imgFileInput
-     - vidFileInput
+     - rawImageInput: raw pixel image
+     - encImageInput: encoded image
+     - imgFileInput: image file input
+     - vidFileInput: video file input
 
     """
 
@@ -1542,9 +1719,11 @@ class InputParams(object):
 
 class DetectionInput(object):
     """
+    Detection input
+
     Attributes:
-     - type
-     - params
+     - type: detection input type
+     - params: detection input params
 
     """
 
@@ -1611,16 +1790,18 @@ class DetectionInput(object):
 
 class DetectedObject(object):
     """
+    Detected object descriptor
+
     Attributes:
-     - name
-     - objectId
-     - top
-     - left
-     - bottom
-     - right
-     - frameIndex
-     - confidence
-     - direction
+     - name: friendly name of detected object
+     - objectId: unique object id for object within session
+     - top: top-left y co-ordinate normalized [0,1]
+     - left: top-left x co-ordinate normalized [0,1]
+     - bottom: bottom-right y co-ordinate normalized [0,1]
+     - right: bottom-right x co-ordinate normalized [0,1]
+     - frameIndex: index of frame (for videos) where object was detected
+     - confidence: confidence score of detection [0, 1]
+     - direction: line cross direction (if applicable)
 
     """
 
@@ -1756,8 +1937,10 @@ class DetectedObject(object):
 
 class ObjectDetectionResult(object):
     """
+    Object detection result
+
     Attributes:
-     - objects
+     - objects: list of detected objects
 
     """
 
@@ -1822,6 +2005,8 @@ class ObjectDetectionResult(object):
 
 class SocialDistanceViolation(object):
     """
+    Social distancing violation instance - detected object pair in violation
+
     Attributes:
      - first
      - second
@@ -1892,8 +2077,10 @@ class SocialDistanceViolation(object):
 
 class SocialDistanceResult(object):
     """
+    Social distancing violation results
+
     Attributes:
-     - violations
+     - violations: list of social distancing violations
 
     """
 
@@ -1958,9 +2145,11 @@ class SocialDistanceResult(object):
 
 class LineCrossViolation(object):
     """
+    Line cross violation instance
+
     Attributes:
-     - first
-     - second
+     - first: object position before crossing
+     - second: object position after crossing
 
     """
 
@@ -2028,8 +2217,10 @@ class LineCrossViolation(object):
 
 class LineCrossDetectionResult(object):
     """
+    Line cross detection results
+
     Attributes:
-     - violations
+     - violations: list of line cross violations
 
     """
 
@@ -2094,8 +2285,10 @@ class LineCrossDetectionResult(object):
 
 class MaskDetectionResult(object):
     """
+    Mask detection results
+
     Attributes:
-     - objects
+     - objects: list of mask (violations and compliant) objects
 
     """
 
@@ -2158,24 +2351,489 @@ class MaskDetectionResult(object):
         return not (self == other)
 
 
+class DetectedText(object):
+    """
+    Detected Text descriptor
+
+    Attributes:
+     - text: detected text in utf-8 encoding
+     - topLeftY: top-left y co-ordinate normalized [0,1]
+     - topLeftX: top-left x co-ordinate normalized [0,1]
+     - topRightY: top-right y co-ordinate normalized [0,1]
+     - topRightX: top-right x co-ordinate normalized [0,1]
+     - bottomRightY: bottom-right y co-ordinate normalized [0,1]
+     - bottomRightX: bottom-right x co-ordinate normalized [0,1]
+     - bottomLeftY: bottom-left y co-ordinate normalized [0,1]
+     - bottomLeftX: bottom-left x co-ordinate normalized [0,1]
+     - confidence: confidence score of detection [0, 1]
+
+    """
+
+
+    def __init__(self, text=None, topLeftY=None, topLeftX=None, topRightY=None, topRightX=None, bottomRightY=None, bottomRightX=None, bottomLeftY=None, bottomLeftX=None, confidence=None,):
+        self.text = text
+        self.topLeftY = topLeftY
+        self.topLeftX = topLeftX
+        self.topRightY = topRightY
+        self.topRightX = topRightX
+        self.bottomRightY = bottomRightY
+        self.bottomRightX = bottomRightX
+        self.bottomLeftY = bottomLeftY
+        self.bottomLeftX = bottomLeftX
+        self.confidence = confidence
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.text = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.DOUBLE:
+                    self.topLeftY = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.DOUBLE:
+                    self.topLeftX = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.DOUBLE:
+                    self.topRightY = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.DOUBLE:
+                    self.topRightX = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.DOUBLE:
+                    self.bottomRightY = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 7:
+                if ftype == TType.DOUBLE:
+                    self.bottomRightX = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.DOUBLE:
+                    self.bottomLeftY = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.DOUBLE:
+                    self.bottomLeftX = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 10:
+                if ftype == TType.DOUBLE:
+                    self.confidence = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('DetectedText')
+        if self.text is not None:
+            oprot.writeFieldBegin('text', TType.STRING, 1)
+            oprot.writeString(self.text.encode('utf-8') if sys.version_info[0] == 2 else self.text)
+            oprot.writeFieldEnd()
+        if self.topLeftY is not None:
+            oprot.writeFieldBegin('topLeftY', TType.DOUBLE, 2)
+            oprot.writeDouble(self.topLeftY)
+            oprot.writeFieldEnd()
+        if self.topLeftX is not None:
+            oprot.writeFieldBegin('topLeftX', TType.DOUBLE, 3)
+            oprot.writeDouble(self.topLeftX)
+            oprot.writeFieldEnd()
+        if self.topRightY is not None:
+            oprot.writeFieldBegin('topRightY', TType.DOUBLE, 4)
+            oprot.writeDouble(self.topRightY)
+            oprot.writeFieldEnd()
+        if self.topRightX is not None:
+            oprot.writeFieldBegin('topRightX', TType.DOUBLE, 5)
+            oprot.writeDouble(self.topRightX)
+            oprot.writeFieldEnd()
+        if self.bottomRightY is not None:
+            oprot.writeFieldBegin('bottomRightY', TType.DOUBLE, 6)
+            oprot.writeDouble(self.bottomRightY)
+            oprot.writeFieldEnd()
+        if self.bottomRightX is not None:
+            oprot.writeFieldBegin('bottomRightX', TType.DOUBLE, 7)
+            oprot.writeDouble(self.bottomRightX)
+            oprot.writeFieldEnd()
+        if self.bottomLeftY is not None:
+            oprot.writeFieldBegin('bottomLeftY', TType.DOUBLE, 8)
+            oprot.writeDouble(self.bottomLeftY)
+            oprot.writeFieldEnd()
+        if self.bottomLeftX is not None:
+            oprot.writeFieldBegin('bottomLeftX', TType.DOUBLE, 9)
+            oprot.writeDouble(self.bottomLeftX)
+            oprot.writeFieldEnd()
+        if self.confidence is not None:
+            oprot.writeFieldBegin('confidence', TType.DOUBLE, 10)
+            oprot.writeDouble(self.confidence)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class LicensePlateNumber(object):
+    """
+    License Plate Number descriptor
+
+    Attributes:
+     - plate: license plate number in utf-8 encoding
+     - confidence: confidence of detection [0, 1]
+
+    """
+
+
+    def __init__(self, plate=None, confidence=None,):
+        self.plate = plate
+        self.confidence = confidence
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.plate = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.DOUBLE:
+                    self.confidence = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('LicensePlateNumber')
+        if self.plate is not None:
+            oprot.writeFieldBegin('plate', TType.STRING, 1)
+            oprot.writeString(self.plate.encode('utf-8') if sys.version_info[0] == 2 else self.plate)
+            oprot.writeFieldEnd()
+        if self.confidence is not None:
+            oprot.writeFieldBegin('confidence', TType.DOUBLE, 2)
+            oprot.writeDouble(self.confidence)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class LicensePlate(object):
+    """
+    License plate descriptor
+
+    Attributes:
+     - detections: license plate number detections for this plate
+     - objectId: unique object id for object within session
+     - top: top-left y co-ordinate normalized [0,1]
+     - left: top-left x co-ordinate normalized [0,1]
+     - bottom: bottom-right y co-ordinate normalized [0,1]
+     - right: bottom-right x co-ordinate normalized [0,1]
+     - frameIndex: index of frame (for videos) where object was detected
+     - confidence: confidence of detection score [0, 1]
+     - associatedText: associated text found with license plate
+
+    """
+
+
+    def __init__(self, detections=None, objectId=None, top=None, left=None, bottom=None, right=None, frameIndex=None, confidence=None, associatedText=None,):
+        self.detections = detections
+        self.objectId = objectId
+        self.top = top
+        self.left = left
+        self.bottom = bottom
+        self.right = right
+        self.frameIndex = frameIndex
+        self.confidence = confidence
+        self.associatedText = associatedText
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.detections = []
+                    (_etype59, _size56) = iprot.readListBegin()
+                    for _i60 in range(_size56):
+                        _elem61 = LicensePlateNumber()
+                        _elem61.read(iprot)
+                        self.detections.append(_elem61)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.objectId = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.DOUBLE:
+                    self.top = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.DOUBLE:
+                    self.left = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.DOUBLE:
+                    self.bottom = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.DOUBLE:
+                    self.right = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 7:
+                if ftype == TType.I32:
+                    self.frameIndex = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.DOUBLE:
+                    self.confidence = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.LIST:
+                    self.associatedText = []
+                    (_etype65, _size62) = iprot.readListBegin()
+                    for _i66 in range(_size62):
+                        _elem67 = DetectedText()
+                        _elem67.read(iprot)
+                        self.associatedText.append(_elem67)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('LicensePlate')
+        if self.detections is not None:
+            oprot.writeFieldBegin('detections', TType.LIST, 1)
+            oprot.writeListBegin(TType.STRUCT, len(self.detections))
+            for iter68 in self.detections:
+                iter68.write(oprot)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.objectId is not None:
+            oprot.writeFieldBegin('objectId', TType.I32, 2)
+            oprot.writeI32(self.objectId)
+            oprot.writeFieldEnd()
+        if self.top is not None:
+            oprot.writeFieldBegin('top', TType.DOUBLE, 3)
+            oprot.writeDouble(self.top)
+            oprot.writeFieldEnd()
+        if self.left is not None:
+            oprot.writeFieldBegin('left', TType.DOUBLE, 4)
+            oprot.writeDouble(self.left)
+            oprot.writeFieldEnd()
+        if self.bottom is not None:
+            oprot.writeFieldBegin('bottom', TType.DOUBLE, 5)
+            oprot.writeDouble(self.bottom)
+            oprot.writeFieldEnd()
+        if self.right is not None:
+            oprot.writeFieldBegin('right', TType.DOUBLE, 6)
+            oprot.writeDouble(self.right)
+            oprot.writeFieldEnd()
+        if self.frameIndex is not None:
+            oprot.writeFieldBegin('frameIndex', TType.I32, 7)
+            oprot.writeI32(self.frameIndex)
+            oprot.writeFieldEnd()
+        if self.confidence is not None:
+            oprot.writeFieldBegin('confidence', TType.DOUBLE, 8)
+            oprot.writeDouble(self.confidence)
+            oprot.writeFieldEnd()
+        if self.associatedText is not None:
+            oprot.writeFieldBegin('associatedText', TType.LIST, 9)
+            oprot.writeListBegin(TType.STRUCT, len(self.associatedText))
+            for iter69 in self.associatedText:
+                iter69.write(oprot)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class AlprResult(object):
+    """
+    ALPR results
+
+    Attributes:
+     - objects: list of ALPR detections
+
+    """
+
+
+    def __init__(self, objects=None,):
+        self.objects = objects
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.objects = []
+                    (_etype73, _size70) = iprot.readListBegin()
+                    for _i74 in range(_size70):
+                        _elem75 = LicensePlate()
+                        _elem75.read(iprot)
+                        self.objects.append(_elem75)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('AlprResult')
+        if self.objects is not None:
+            oprot.writeFieldBegin('objects', TType.LIST, 1)
+            oprot.writeListBegin(TType.STRUCT, len(self.objects))
+            for iter76 in self.objects:
+                iter76.write(oprot)
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
 class DetectionOutput(object):
     """
+    Detection output descriptor
+
     Attributes:
-     - status
-     - objDetResult
-     - socialDetResult
-     - lineCrossResult
-     - maskDetResult
+     - status: Detection status code
+     - objDetResult: object detections
+     - socialDetResult: social distancing violations
+     - lineCrossResult: line crossing detections
+     - maskDetResult: mask detections
+     - alprResult: ALPR detections
 
     """
 
 
-    def __init__(self, status=None, objDetResult=None, socialDetResult=None, lineCrossResult=None, maskDetResult=None,):
+    def __init__(self, status=None, objDetResult=None, socialDetResult=None, lineCrossResult=None, maskDetResult=None, alprResult=None,):
         self.status = status
         self.objDetResult = objDetResult
         self.socialDetResult = socialDetResult
         self.lineCrossResult = lineCrossResult
         self.maskDetResult = maskDetResult
+        self.alprResult = alprResult
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -2215,6 +2873,12 @@ class DetectionOutput(object):
                     self.maskDetResult.read(iprot)
                 else:
                     iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.STRUCT:
+                    self.alprResult = AlprResult()
+                    self.alprResult.read(iprot)
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -2244,6 +2908,10 @@ class DetectionOutput(object):
         if self.maskDetResult is not None:
             oprot.writeFieldBegin('maskDetResult', TType.STRUCT, 5)
             self.maskDetResult.write(oprot)
+            oprot.writeFieldEnd()
+        if self.alprResult is not None:
+            oprot.writeFieldBegin('alprResult', TType.STRUCT, 6)
+            self.alprResult.write(oprot)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -2329,6 +2997,14 @@ MaskDetectionSettings.thrift_spec = (
     None,  # 0
     (1, TType.BOOL, 'enabled', None, None, ),  # 1
 )
+all_structs.append(AlprSettings)
+AlprSettings.thrift_spec = (
+    None,  # 0
+    (1, TType.BOOL, 'enabled', None, None, ),  # 1
+    (2, TType.STRING, 'region', 'UTF8', None, ),  # 2
+    (3, TType.BOOL, 'skipVehicleCheck', None, None, ),  # 3
+    (4, TType.STRING, 'presetMode', 'UTF8', None, ),  # 4
+)
 all_structs.append(DetectionSettings)
 DetectionSettings.thrift_spec = (
     None,  # 0
@@ -2337,6 +3013,7 @@ DetectionSettings.thrift_spec = (
     (3, TType.STRUCT, 'detAreaSettings', [DetectionAreaSettings, None], None, ),  # 3
     (4, TType.STRUCT, 'lineCrossSettings', [LineCrossSettings, None], None, ),  # 4
     (5, TType.STRUCT, 'maskSettings', [MaskDetectionSettings, None], None, ),  # 5
+    (6, TType.STRUCT, 'alprSettings', [AlprSettings, None], None, ),  # 6
 )
 all_structs.append(DetectionSession)
 DetectionSession.thrift_spec = (
@@ -2429,6 +3106,44 @@ MaskDetectionResult.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'objects', (TType.STRUCT, [DetectedObject, None], False), None, ),  # 1
 )
+all_structs.append(DetectedText)
+DetectedText.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'text', 'UTF8', None, ),  # 1
+    (2, TType.DOUBLE, 'topLeftY', None, None, ),  # 2
+    (3, TType.DOUBLE, 'topLeftX', None, None, ),  # 3
+    (4, TType.DOUBLE, 'topRightY', None, None, ),  # 4
+    (5, TType.DOUBLE, 'topRightX', None, None, ),  # 5
+    (6, TType.DOUBLE, 'bottomRightY', None, None, ),  # 6
+    (7, TType.DOUBLE, 'bottomRightX', None, None, ),  # 7
+    (8, TType.DOUBLE, 'bottomLeftY', None, None, ),  # 8
+    (9, TType.DOUBLE, 'bottomLeftX', None, None, ),  # 9
+    (10, TType.DOUBLE, 'confidence', None, None, ),  # 10
+)
+all_structs.append(LicensePlateNumber)
+LicensePlateNumber.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'plate', 'UTF8', None, ),  # 1
+    (2, TType.DOUBLE, 'confidence', None, None, ),  # 2
+)
+all_structs.append(LicensePlate)
+LicensePlate.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'detections', (TType.STRUCT, [LicensePlateNumber, None], False), None, ),  # 1
+    (2, TType.I32, 'objectId', None, None, ),  # 2
+    (3, TType.DOUBLE, 'top', None, None, ),  # 3
+    (4, TType.DOUBLE, 'left', None, None, ),  # 4
+    (5, TType.DOUBLE, 'bottom', None, None, ),  # 5
+    (6, TType.DOUBLE, 'right', None, None, ),  # 6
+    (7, TType.I32, 'frameIndex', None, None, ),  # 7
+    (8, TType.DOUBLE, 'confidence', None, None, ),  # 8
+    (9, TType.LIST, 'associatedText', (TType.STRUCT, [DetectedText, None], False), None, ),  # 9
+)
+all_structs.append(AlprResult)
+AlprResult.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'objects', (TType.STRUCT, [LicensePlate, None], False), None, ),  # 1
+)
 all_structs.append(DetectionOutput)
 DetectionOutput.thrift_spec = (
     None,  # 0
@@ -2437,6 +3152,7 @@ DetectionOutput.thrift_spec = (
     (3, TType.STRUCT, 'socialDetResult', [SocialDistanceResult, None], None, ),  # 3
     (4, TType.STRUCT, 'lineCrossResult', [LineCrossDetectionResult, None], None, ),  # 4
     (5, TType.STRUCT, 'maskDetResult', [MaskDetectionResult, None], None, ),  # 5
+    (6, TType.STRUCT, 'alprResult', [AlprResult, None], None, ),  # 6
 )
 fix_spec(all_structs)
 del all_structs

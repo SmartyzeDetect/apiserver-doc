@@ -6,7 +6,9 @@ from api.ttypes import *
 class DetectionRunner:
   def __init__(self, objEnabled=True, maskEnabled=True,
                       sdEnabled=False, lcEnabled=False, areaEnabled=False,
-                      objEnv=ObjectDetectionEnv.NORMAL):
+                      objEnv=ObjectDetectionEnv.NORMAL, lprEnabled=False,
+                      lprRegion='', lprSkipVehicleCheck=False,
+                      lprPresetMode='medium'):
       objSettings = ObjectDetectionSettings(env=objEnv,
           objectType=ObjectType.PERSON, detectOnlyMovingObjects=False,
           enabled=objEnabled)
@@ -39,10 +41,15 @@ class DetectionRunner:
       lcSettings = LineCrossSettings(boundary=lcBoundary, inPoint=lcPoint,
           crossCriteria=LineCrossCriteria.LINE_CROSS, enabled=lcEnabled)
       maskSettings = MaskDetectionSettings(enabled=maskEnabled)
+      lprSettings = AlprSettings(enabled=lprEnabled, region=lprRegion,
+          skipVehicleCheck=lprSkipVehicleCheck, presetMode=lprPresetMode)
 
       self.detSettings = DetectionSettings(objSettings=objSettings,
           sdSettings=sdSettings, detAreaSettings=areaSettings,
-          lineCrossSettings=lcSettings, maskSettings=maskSettings)
+          lineCrossSettings=lcSettings, maskSettings=maskSettings,
+          alprSettings=lprSettings)
+      ## for lpr only, upto full HD resolutions are allowed
+      self.doLargeFrames = lprEnabled
   pass
 
   """ new settings will only take effect from next new session """
@@ -93,7 +100,10 @@ class DetectionRunner:
                                 params=detParams)
     else:
       frame = cv2.imread(image, cv2.IMREAD_COLOR)
-      frame = cv2.resize(frame, (640, 480), interpolation=cv2.INTER_AREA)
+      if self.doLargeFrames:
+        frame = frame ## pass frames as is
+      else:
+        frame = cv2.resize(frame, (640, 480), interpolation=cv2.INTER_AREA)
       frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
       (height, width) = frame.shape[:2]
       imgBuffer = frame.tobytes()
@@ -151,7 +161,10 @@ class DetectionRunner:
         continue
       if (findex // frameModulo) >= 600:
         break
-      frame = cv2.resize(frame, (640, 480), interpolation=cv2.INTER_AREA)
+      if self.doLargeFrames:
+        frame = frame ## pass frames as is
+      else:
+        frame = cv2.resize(frame, (640, 480), interpolation=cv2.INTER_AREA)
       frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
       (height, width) = frame.shape[:2]
       imgBuffer = frame.tobytes()
@@ -167,7 +180,7 @@ class DetectionRunner:
           detInput)
 
       if res != ResultCode.SUCCESS:
-        print('Failed processing frame {} with {}' % (findex, res))
+        print('Failed processing frame {} ' % (findex), res)
 
       if frameCb is not None:
         ## also get current set of results and inform caller

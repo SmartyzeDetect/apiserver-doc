@@ -4,11 +4,9 @@ import sys
 import pprint
 import time
 import traceback
-import boto3
 import json
 import os
 import requests
-from aws_requests_auth.aws_auth import AWSRequestsAuth
 from thrift.transport import TTransport, TSocket, TSSLSocket, THttpClient
 from thrift.protocol.TBinaryProtocol import TBinaryProtocol
 
@@ -18,9 +16,6 @@ from constants import Constants
 
 USE_UNIX_SOCK = Constants.USE_UNIX_SOCKETS
 UNIX_SOCK_NAME = Constants.getUnixSocketPath()
-
-AWS_API_KEY = os.getenv('AWS_API_KEY', '')
-AWS_PROFILE = os.getenv('AWS_PROFILE', '')
 
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -36,9 +31,10 @@ class DetectionApiClient:
   pass
 
   @staticmethod
-  def waitForServer():
+  def waitForServer(host='127.0.0.1', port=9090):
     while True:
-      client = DetectionApiClient.createClient(autoConnect=False)
+      client = DetectionApiClient.createClient(host=host, port=port,
+          autoConnect=False)
       try:
         client.connect()
       except Exception as e:
@@ -59,65 +55,6 @@ class DetectionApiClient:
         print('Server is up, returning')
         break
     pass
-  pass
-
-  @staticmethod
-  def activateServer(server, port, awsProfile=None, apiKey=None):
-    if apiKey is None:
-      apiKey = AWS_API_KEY
-    if awsProfile is None:
-      awsProfile = AWS_PROFILE
-    if len(apiKey) == 0 or len(awsProfile) == 0:
-      print('Error::API key or profile not set in environment')
-      return -1
-
-    client = DetectionApiClient.createClient(host=server, port=port)
-    res = client.getStatus()
-    if res.initStatus != ResultCode.ERR_NOT_ACTIVATED:
-      client.close()
-      if res.initStatus == ResultCode.SUCCESS:
-        ## We just return as is here since no activation is required
-        print('Success:ApiServer already activated')
-        return 0
-      print('Error::ApiServer invalid status:', res)
-      return -2
-
-    if res.activationChallenge is None or len(res.activationChallenge) == 0:
-      print('Error::No challenge provided by ApiServer', res)
-      client.close()
-      return -3
-
-    session = boto3.Session(profile_name=awsProfile)
-    credentials = session.get_credentials()
-    auth = AWSRequestsAuth(
-        aws_access_key=credentials.access_key,
-        aws_secret_access_key=credentials.secret_key,
-        aws_token=credentials.token,
-        aws_host='license.smartyzedetect.com',
-        aws_region='ap-south-1',
-        aws_service='execute-api')
-    response = requests.post(
-        'https://license.smartyzedetect.com/api/license',
-        auth=auth,
-        data=json.dumps(
-            {'mode': 'online', 'challenge': res.activationChallenge}),
-        headers={'x-api-key': apiKey})
-    if response.status_code != requests.codes.ok:
-      print('Error::License server error::response is:',
-          response, response.text)
-      client.close()
-      return -4
-
-    res = client.init(response.json()['token'])
-    #print('License check status:', res)
-    client.close()
-
-    if res.initStatus != ResultCode.SUCCESS:
-      print('Error::Activation failed:', res)
-      return -5
-
-    print('Success::Activation success')
-    return 0
   pass
 
   def __init__(self, host='127.0.0.1', port=9090, uri='', framed=False,
@@ -160,10 +97,6 @@ class DetectionApiClient:
     self.client = DetectionApi.Client(protocol)
   pass
 
-  def activate(self):
-    return DetectionApiClient.activateServer(self.host)
-  pass
- 
   def connect(self):
     if self.transport is not None:
       self.transport.open()
