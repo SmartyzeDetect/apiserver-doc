@@ -1,6 +1,6 @@
 ## SmartyzeDetect API Server
 
-SmartyzeDetect provides simplified APIs for AI solutions like ANPR/ALPR, Intrusion Detection, Line-cross Detection (Tripwire), Social Distancing Detection and Mask Detection. The API is deployable as a [Docker](https://www.docker.com/) container and accessible via either a REST or [thrift](https://thrift.apache.org/) RPC interface.
+SmartyzeDetect provides simplified APIs for AI-based solutions like ANPR/ALPR, Intrusion Detection, Line-cross Detection (Tripwire), Social Distancing Detection and Mask Detection. The API is deployable as a [Docker](https://www.docker.com/) container and accessible via either a REST or [thrift](https://thrift.apache.org/) RPC interface.
 
 This repository contains a basic user guide for anyone wishing to try out the APIs for themselves. It currently contains:
   - A high level conceptual overview of the API
