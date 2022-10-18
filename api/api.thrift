@@ -14,7 +14,7 @@ namespace netstd smartyzed
 
 ## API version
 /** API version - follows semantic versioning */
-const string API_VERSION = "2.0.0"
+const string API_VERSION = "2.1.0"
 
 ## configuration and status
 /** Result codes for APIs */
@@ -31,6 +31,10 @@ enum ResultCode {
   ERR_UNSUPPORTED = 5,
   /** API server is not activated with a license */
   ERR_NOT_ACTIVATED = 6,
+  /** API limit provisioned with license is reached */
+  ERR_API_LIMIT = 7,
+  /** API server not able to reach internet */
+  ERR_NET_FAIL = 8,
 }
 
 /** API server initialization request */
