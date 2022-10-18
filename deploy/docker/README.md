@@ -2,7 +2,7 @@
 
 To follow the steps in this tutorial, a basic understanding of Docker is required. This tutorial assumes that the following prerequisites have been completed.
 
-1. A Linux machine with Docker (tested with 20.10.18 on Ubuntu but others should work as well) and access to internet to run the demo (See Machine Compatibility section at end for compute requirements)
+1. A Linux machine with Docker (tested with Docker version 20.10.18 on Debian but others should work as well) and access to internet (See Machine Compatibility section at end for compute requirements)
 
 2. A license key for the API server, you can get one by filling out the form at [link](https://www.smartyzedetect.com/pages/sdkfreetrial)
 
@@ -17,7 +17,7 @@ To follow the steps in this tutorial, a basic understanding of Docker is require
 
 - Step 2: Start API Server
 
-  Start the API server by running the below command in the same terminal. The below command starts the API server in HTTP/REST API mode.
+  Start the API server by running the below command in the same terminal. The below command starts the API server in HTTP/REST API mode. You can use different values specified in the below section to enable thrift RPC over TCP.
   ```
   docker run -e SD_API_TRANSPORT=4 -e SD_API_LICENSE_KEY=${SD_API_LICENSE_KEY} -p 127.0.0.1:9090:9090/tcp public.ecr.aws/smartyzedetect/ml/sd-apiserver:latest
   ```
@@ -62,13 +62,6 @@ Some behaviors of the API server are configurable by setting certain environment
     - 0 : API server will bind to selected TCP port on all network interfaces (default, changed in version 1.1.0)
     - 1 : API server will only bind to selected TCP port on localhost interface (only for thrift RPC, REST API always binds on all network interfaces)
 
-
-- Environment variable: SD_DEBUG_CRASH (WIP)
-
-  Values:
-    - 0 : No crash handlers will be setup and no minidump will be generated on API server crash (default)
-    - 1 : Crash handlers will be setup and minidump will be written to /var/data/ (make sure this path is mapped to a volume that is writable from within the container and presists after the container exits so that you can retrieve the minidump file)
-
 ## Machine Compatibility
 
 The SDK requires a host CPU with certain minimum capabilities in order to function. These are listed below in case you are trying to run this on custom hardware or non-cloud environments.
@@ -78,9 +71,7 @@ The SDK requires a host CPU with certain minimum capabilities in order to functi
 - F16C support - CPU
 - FMA3 support - CPU
 
-The example above uses Fargate for deploying the API server which works because Fargate for x86 runs on x86-64 based Intel CPUs which have the required CPU capabilities.
-
 For AWS, it is recommended to run on compute optimized instance types as these are meant for ML inference type workloads (both Intel and AMD CPUs should work - tested on c4, c5 and c5a instance types).
 
-For any custom instance type deployments, please check that the API server can run successfully (launch successfully, valid status from getStatus API and successful inference on image/video) before proceeding.
+For any custom instance type deployments, please check that the API server can run successfully (launch successfully and successful inference on image/video) before proceeding.
 

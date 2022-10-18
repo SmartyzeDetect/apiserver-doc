@@ -118,13 +118,17 @@ class ObjectExecutor:
       colorMap = {}
       if self.type == 'mask':
         colorMap = {'none': (0, 0, 255), 'mask': (0, 255, 0)}
-      drawObjects(img, rjson['result'][0]['data'], colorMap=colorMap)
+      if len(rjson['result']) > 0:
+        drawObjects(img, rjson['result'][0]['data'], colorMap=colorMap)
       if HAVE_DISPLAY:
         cv2.imshow('Result', img)
         cv2.waitKey(0)
       else:
         cv2.imwrite('result.jpg', img)
-        print(rjson['result'][0]['data'])
+        if len(rjson['result']) > 0:
+          print(rjson['result'][0]['data'])
+        else:
+          print('No objects were found in image')
   pass
 pass
 
@@ -162,13 +166,17 @@ class AlprExecutor:
         return
       img = cv2.imread(imgFile)
       img = cv2.resize(img, (640, 480), interpolation=cv2.INTER_AREA)
-      drawPlates(img, rjson['result'][0]['data'])
+      if len(rjson['result']) > 0:
+        drawPlates(img, rjson['result'][0]['data'])
       if HAVE_DISPLAY:
         cv2.imshow('Result', img)
         cv2.waitKey(0)
       else:
         cv2.imwrite('result.jpg', img)
-        print(rjson['result'][0]['data'])
+        if len(rjson['result']) > 0:
+          print(rjson['result'][0]['data'])
+        else:
+          print('No plates were found in image')
   pass
 pass
 

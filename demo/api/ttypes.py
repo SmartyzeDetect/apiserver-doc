@@ -27,6 +27,8 @@ class ResultCode(object):
     ERR_INVALID_REQ = 4
     ERR_UNSUPPORTED = 5
     ERR_NOT_ACTIVATED = 6
+    ERR_API_LIMIT = 7
+    ERR_NET_FAIL = 8
 
     _VALUES_TO_NAMES = {
         1: "SUCCESS",
@@ -35,6 +37,8 @@ class ResultCode(object):
         4: "ERR_INVALID_REQ",
         5: "ERR_UNSUPPORTED",
         6: "ERR_NOT_ACTIVATED",
+        7: "ERR_API_LIMIT",
+        8: "ERR_NET_FAIL",
     }
 
     _NAMES_TO_VALUES = {
@@ -44,6 +48,8 @@ class ResultCode(object):
         "ERR_INVALID_REQ": 4,
         "ERR_UNSUPPORTED": 5,
         "ERR_NOT_ACTIVATED": 6,
+        "ERR_API_LIMIT": 7,
+        "ERR_NET_FAIL": 8,
     }
 
 

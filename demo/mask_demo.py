@@ -1,7 +1,6 @@
 import argparse
 import os
 import sys
-import pickle
 
 from api.ttypes import *
 from DetectionApiClientImpl import DetectionApiClient
@@ -57,9 +56,6 @@ def main():
   ap.add_argument("-p", "--port", type=int,
     help="port at api server", required=False,
     default=9090)
-  ap.add_argument("-o", "--output", type=str,
-    help="path to output pickle file", required=False,
-    default='')
   ap.add_argument('-e', '--end', action='store_true',
     help='show results at end only',
     required=False, default=False)
@@ -75,17 +71,6 @@ def main():
     print('Fail::failed to execute api',
         apiExecutor.getOutput().status)
     sys.exit(-2)
-
-  output = apiExecutor.getOutput()
-
-  if args.output is not None and len(args.output) > 0:
-    dataOut = {}
-    dataOut['type'] = 'MaskDetection'
-    dataOut['input'] = os.path.abspath(args.input)
-    dataOut['fps'] = 5
-    dataOut['output'] = output
-    with open(args.output, 'wb') as of:
-      pickle.dump(dataOut, of)
 pass
 
 if __name__ == "__main__":

@@ -12,4 +12,4 @@ from thrift.TRecursive import fix_spec
 
 import sys
 from .ttypes import *
-API_VERSION = "2.0.0"
+API_VERSION = "2.1.0"
