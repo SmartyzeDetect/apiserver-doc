@@ -212,7 +212,7 @@ class OutputRenderer:
           for i, lp in enumerate(det.detections):
             texts.append('Plate ID({}) #{}:{}'.format(numLprs, i,
                 lp.plate))
-            if False:
+            if not HAVE_DISPLAY:
               print('Fid({}): Plate ID({}) #{}:{}'.format(frameIndex,
                   numLprs, i, lp.plate))
     pass
@@ -284,6 +284,8 @@ class DisplayUtils:
         #sys.exit(0)
     else:
       cv2.imwrite('result.jpg', frame)
+      if len(dets) > 0:
+        print(len(dets), 'detections found')
     return True
   pass
 
