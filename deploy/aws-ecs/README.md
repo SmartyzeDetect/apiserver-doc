@@ -76,7 +76,7 @@ All the steps below require customization according to your deployment environme
 
 - Step 5: Try out the sample demos
 
-  At this point you have a task launched with the apiserver container with a public IP. You can now use the sample demo scripts to try out the APIs. Switch to the demo folder to try out the various usecases. Once done come back here to proceed with cleanup of resources.
+  At this point you have a task launched with the apiserver container with a public IP. You can now use the sample demo scripts to try out the APIs. Switch to the [demo](/demo) directory to try out the various usecases. Once done come back here to proceed with cleanup of resources.
 
   **Note: The deployment above creates a task that will run forever. This will continue incurring charges on your AWS account if not stopped and cleaned up. Remember to clean up the task and cluster once you are done**
 
@@ -104,15 +104,15 @@ Some behaviors of the API server are configurable by settings certain environmen
 - Environment variable: SD_API_LICENSE_KEY
 
   Values:
-    - <license-key> : License key to use for initializing API server. This can be used to remove explicit initApi calls for license activation and is mandatory for using the HTTP transport (introduced in version 2.0.0)
+    - <license-key> : License key to use for initializing API server. This can be used to remove explicit initApi calls for license activation and is mandatory for using the HTTP transport
 
 
 - Environment variable: SD_API_TRANSPORT
 
   Values:
-    - 1 : TCP socket transport
-    - 2 : Unix socket transport (Default)
-    - 4 : HTTP transport - exposes REST API instead of thrift RPC (introduced in version 2.0.0)
+    - 1 : TCP socket transport (default)
+    - 2 : Unix socket transport
+    - 4 : HTTP transport - exposes REST API instead of thrift RPC
 
 
 - Environment variable: SD_API_TCP_PORT
@@ -124,7 +124,7 @@ Some behaviors of the API server are configurable by settings certain environmen
 - Environment variable: SD_API_TCP_LOCAL
 
   Values:
-    - 0 : API server will bind to selected TCP port on all network interfaces (default, changed in version 1.1.0)
+    - 0 : API server will bind to selected TCP port on all network interfaces (default)
     - 1 : API server will only bind to selected TCP port on localhost interface (only for thrift RPC, REST API always binds on all network interfaces)
 
 ## Machine Compatibility

@@ -24,7 +24,7 @@ To follow the steps in this tutorial, a basic understanding of Docker is require
 
 - Step 3: Run the demos
 
-  Once the container is up, you can open up a new terminal window to run the demos. Once done, you can come back to this window for the cleanup steps.
+  Once the container is up, you can open up a new terminal window to run the demos. Some samples are provides in the [demo directory](/demo). Once done, you can come back to this window for the cleanup steps.
 
 - Step 4: Clean up
 
@@ -39,15 +39,15 @@ Some behaviors of the API server are configurable by setting certain environment
 - Environment variable: SD_API_LICENSE_KEY
 
   Values:
-    - <license-key> : License key to use for initializing API server. This can be used to remove explicit initApi calls for license activation and is mandatory for using the HTTP transport (introduced in version 2.0.0)
+    - <license-key> : License key to use for initializing API server. This can be used to remove explicit initApi calls for license activation and is mandatory for using the HTTP transport
 
 
 - Environment variable: SD_API_TRANSPORT
 
   Values:
-    - 1 : TCP socket transport
-    - 2 : Unix socket transport (Default)
-    - 4 : HTTP transport - exposes REST API instead of thrift RPC (introduced in version 2.0.0)
+    - 1 : TCP socket transport (default)
+    - 2 : Unix socket transport
+    - 4 : HTTP transport - exposes REST API instead of thrift RPC
 
 
 - Environment variable: SD_API_TCP_PORT
@@ -59,7 +59,7 @@ Some behaviors of the API server are configurable by setting certain environment
 - Environment variable: SD_API_TCP_LOCAL
 
   Values:
-    - 0 : API server will bind to selected TCP port on all network interfaces (default, changed in version 1.1.0)
+    - 0 : API server will bind to selected TCP port on all network interfaces (default)
     - 1 : API server will only bind to selected TCP port on localhost interface (only for thrift RPC, REST API always binds on all network interfaces)
 
 ## Machine Compatibility

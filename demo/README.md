@@ -4,7 +4,7 @@ The scripts in this directory provide simple demos for the capabilities of the S
 
 ## Pre-requisites
 
-  - In order to run the demo, you need a running instance of the SmartyzeDetect API server (see the deploy directory for instructions to start one).
+  - In order to run the demo, you need a running instance of the SmartyzeDetect API server (see the [deploy](/deploy) directory for instructions to start one).
   - You need a license key to activate the API server before invoking the APIs. You can get one by sending us a request [here](https://www.smartyzedetect.com/sdkfreetrial).
   - You also need python3 and the following pip packages installed:
     - thrift (only if using thrift RPC mode)
